@@ -2,8 +2,8 @@ from tkinter import *
 from time import sleep
 
 class Outputter:
-	def __init__(self, maze, path):
-
+	def __init__(self, maze, path, delay):
+		self.delay = delay;
 		self.path = path;
 
 		height = len(maze)
@@ -35,10 +35,10 @@ class Outputter:
 			e1, e2 = each; #tuple to two values
 
 			self.cells[e1][e2].config(bg="red"); # change value to red
-			sleep(0.02) # sleep value before updating
+			sleep(self.delay) # sleep value before updating
 			self.window.update(); # update window
 
-
+		self.window.mainloop();
 
 	def colour_calc(self, cell):
 
