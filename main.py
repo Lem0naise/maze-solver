@@ -1,5 +1,6 @@
 from solve import MazeSolver;
 from output import Outputter;
+from time import sleep;
 
 # 2 is start
 # 3 is end
@@ -29,4 +30,4 @@ solver = MazeSolver(maze);
 output = Outputter(maze, solver.path);
 
 output.solve();
-#input();
+input();
