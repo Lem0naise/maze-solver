@@ -29,5 +29,5 @@ maze = [
 solver = MazeSolver(maze);
 output = Outputter(maze, solver.path);
 
-output.solve();
-input();
+output.solve()
+ 
