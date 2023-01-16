@@ -1,11 +1,28 @@
 # zac
+from copy import deepcopy
 
 class MazeSolver:
-    def __init__(self, maze, start, end):
+    def __init__(self, maze):
+        n_maze = deepcopy(maze);
+        
+        start, end = None, None;
+        for i in range(len(n_maze)):
+            for j in range(len(n_maze[i])):
+                if n_maze[i][j] == 2:
+                    start = (i, j)
+                    n_maze[i][j] = 0;
+                if n_maze[i][j] == 3:
+                    end = (i, j);
+                    n_maze[i][j] = 0;
 
-        pop_maze = self._populate_maze(maze, start, end);
+                if start and end:
+                    break;
+
+
+        pop_maze = self._populate_maze(n_maze, start, end);
         self.path = self._path_maze(pop_maze, end); # final path
         self.path.reverse();
+
 
 
     def _populate_maze(self, maze_in, start, end):
@@ -52,11 +69,11 @@ class MazeSolver:
         #nb start is not the start of the maze, but the start of the pathfinding
         #it is actually the end of the maze
 
-        path = [start];
+        path = [];
         s1, s2 = start;
         step = pop_maze[s1][s2]; # set path limit
 
-        while step > 1:
+        while step > 2:
 
             if s1>0 and pop_maze[s1-1][s2] == step-1: # cell North
                 s1 -= 1;
