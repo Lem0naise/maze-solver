@@ -35,7 +35,7 @@ class Outputter:
 			e1, e2 = each; #tuple to two values
 
 			self.cells[e1][e2].config(bg="red"); # change value to red
-			sleep(0.0.2) # sleep value before updating
+			sleep(0.02) # sleep value before updating
 			self.window.update(); # update window
 
 
