@@ -3,6 +3,7 @@ from time import sleep
 
 class Outputter:
 	def __init__(self, maze, path, delay):
+		print("Starting window...");
 		self.delay = delay;
 		self.path = path;
 
@@ -12,7 +13,7 @@ class Outputter:
 		# tkinter
 		self.window = Tk();
 		self.window.title("Maze Solver");
-		self.window.geometry(f"{width*20}x{height*20}"); # calculate needed height and width
+		self.window.geometry(f"{width*10}x{height*10}"); # calculate needed height and width
 		self.window.columnconfigure(0, weight=0)
 		
 		self.cells = []
@@ -22,14 +23,16 @@ class Outputter:
 			for j in range(width):
 				colour_l = self.colour_calc(maze[i][j])
 
-				l = Canvas(self.window, bg=colour_l, width=20, height=20, highlightthickness=0);
+				l = Canvas(self.window, bg=colour_l, width=10, height=10, highlightthickness=0);
 				l.grid(row=i, column = j, sticky="nsew");
 				row.append(l);
 
 			self.cells.append(row);
 
 	def solve(self): # draw path
-
+		
+		print("Drawing path...");
+		
 		for each in self.path:
 
 			e1, e2 = each; #tuple to two values

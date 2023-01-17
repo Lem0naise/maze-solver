@@ -18,8 +18,9 @@ class MazeSolver:
                 if start and end:
                     break;
 
-
+        print("Scanning maze...");
         pop_maze = self._populate_maze(n_maze, start, end);
+        print("Pathing through maze...");
         self.path = self._path_maze(pop_maze, end); # final path
         self.path.reverse();
 
