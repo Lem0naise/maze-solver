@@ -1,0 +1,35 @@
+body {
+    padding: 0;
+    margin: 0;
+    width:100vw;
+    height:100vh;
+
+    background-color: black;
+
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.mazerow {
+    padding: 0;
+    margin: 0;
+}
+.mazesquare {
+    display: inline-block;
+    background-color: white;
+    transition: 0s;
+}
+
+.solve-button {
+    width: 100px;
+    height: 50px;
+    border-radius: 20px;
+
+    margin-top: 20px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+
+    background-color: white;
+    border:none;
+}
