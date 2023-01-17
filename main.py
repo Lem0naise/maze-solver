@@ -1,6 +1,7 @@
 from solve import MazeSolver;
 from output import Outputter;
 from time import sleep;
+import json
 
 # 2 is start
 # 3 is end
@@ -88,6 +89,14 @@ maze = [
 ]
 
 solver = MazeSolver(maze);
-output = Outputter(maze, solver.path, 0.001);
 
-output.solve()
+
+# writing json file
+
+height, width = len(maze), len(maze[0]);
+file = open("maze.json", "w")
+write_dic = {
+    "path": solver.path,
+    "hw":[height, width],
+}
+json.dump(write_dic, file);
