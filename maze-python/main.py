@@ -91,26 +91,31 @@ maze = [
 ]
 '''
 maze = [
-    [1, 2, 1, 1],
-    [1, 0, 0, 1],
-    [1, 0, 0, 1],
-    [1, 1, 3, 1],
+    [1, 0, 0, 2, 0, 0, 0, 0, 1,],
+    [1, 0, 0, 0, 0, 0, 0, 0, 1,],
+    [1, 0, 0, 1, 0, 0, 0, 0, 1,],
+    [1, 0, 0, 0, 0, 0, 0, 0, 1,],
+    [1, 0, 0, 0, 1, 0, 0, 0, 1,],
+    [1, 0, 0, 0, 0, 0, 0, 0, 1,],
+    [1, 0, 0, 0, 0, 1, 0, 0, 1,],
+    [1, 0, 0, 0, 0, 0, 0, 0, 1,],
+    [1, 0, 0, 0, 0, 3, 0, 0, 1,]
+    
 ]
 
 solver = MazeSolver(maze);
 
 
 # writing json file
+def write_json():
+    height, width = len(maze), len(maze[0]);
+    write_dic = {
+        "path": solver.path,
+        "hw": [height, width],
+        "maze":maze,
+    }
+    # open link in web browser
+    pw = "password"
+    webbrowser.open('http://localhost:3000?password=' + pw + '&maze='+ json.dumps(write_dic))
 
-height, width = len(maze), len(maze[0]);
-file = open("maze.json", "w")
-write_dic = {
-    "path": solver.path,
-    "hw": [len(maze), len(maze[0])],
-    "maze":maze,
-}
-#json.dump(write_dic, file);
-
-# open link in web browser
-pw = "password"
-webbrowser.open('http://localhost:3000?password=' + pw + '&maze='+ json.dumps(write_dic))
+write_json();
