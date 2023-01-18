@@ -1,9 +1,9 @@
 (async () => {
     try {
-        const rawResponse = await fetch(`http://localhost:3000/maze`); // requests json from http server
+        const rawResponse = await fetch(`http://localhost:3000/get-maze`); // requests json from http server
         data = await rawResponse.json();
     }
-    catch(err) {
+    catch (err) {
         alert('Cannot reach server.\n\n' + err)
     }
 
@@ -17,14 +17,14 @@
         maze_length_pixels = window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight;
         maze_length_pixels *= 0.8
 
-        for (let row=0; row < maze_height; row++) {
+        for (let row = 0; row < maze_height; row++) {
 
             row_array = []
             row_div = document.createElement('div')
             row_div.classList.add('mazerow')
-            row_div.style.height  = `${maze_length_pixels / height}px`
+            row_div.style.height = `${maze_length_pixels / height}px`
 
-            for (let col=0; col < width; col++) {
+            for (let col = 0; col < width; col++) {
 
                 square = document.createElement('div')
                 square.classList.add('mazesquare', `${row},${col}`)
@@ -49,28 +49,50 @@
             }
         }
     }
-    drawFromArray(data.maze, {0:'white', 1:'black', 2:'green', 3:'yellow'})
+    drawFromArray(data.maze, { 0: 'white', 1: 'black', 2: 'green', 3: 'yellow' })
 
     function drawCoords(coords, color) {  // ([], str)
         // Draws any passed coordinates (in this case the path) in any given colour
         for (let i = 0; i < coords.length; i++) {
             console.log(`${coords[i][0]},${coords[i][1]}`)
-            
-            setTimeout(()=>{
+
+            setTimeout(() => {
                 square = document.getElementsByClassName(`${coords[i][0]},${coords[i][1]}`)[0]
                 square.style.transition = '0.2s'
                 square.style.backgroundColor = color;
-            }, 20*i)
+            }, 20 * i)
         }
     }
 
     function handleSolveButton() {
         // On 'solve' button press
-        drawCoords(data.path, 'red')
+        try {
+            drawCoords(data.path, 'red')
+        }
+        catch {
+            alert('Path invalid.')
+        }
     }
     document.getElementById('solve-button').addEventListener('click', handleSolveButton)
 
-    
+    async function listenForNewMaze() {
+        // Waits for server to respond with a new maze, when it is updated (12 hours max)
+        const rawResponse = await fetch(`http://localhost:3000/listen-for-maze`);
+        var data = await rawResponse.json();
+
+        try {
+            drawFromArray(data.maze, { 0: 'white', 1: 'black', 2: 'green', 3: 'yellow' })
+        }
+        catch {
+            alert('Recieved invalid maze from server.')
+        }
+
+        listenForNewMaze()
+    }
+    listenForNewMaze()
+
 })();
 
 // <3
+
+
