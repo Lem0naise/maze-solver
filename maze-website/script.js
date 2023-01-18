@@ -13,6 +13,13 @@
     maze_array = [] // 2D array of all squares
 
     function drawMaze(width, height) { // (int, int) 
+
+        for (let i = 0; i < maze_array.length; i++) {
+            maze_array[i].remove()
+        }
+        maze_array = []
+
+
         // Adds divs (squares) to html, creates maze
         maze_length_pixels = window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight;
         maze_length_pixels *= 0.8
@@ -81,6 +88,7 @@
         var data = await rawResponse.json();
 
         try {
+            drawMaze(data.hw[1], data.hw[0])
             drawFromArray(data.maze, { 0: 'white', 1: 'black', 2: 'green', 3: 'yellow' })
         }
         catch {
