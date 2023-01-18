@@ -1,7 +1,7 @@
 (async () => {
     try {
         const rawResponse = await fetch(`http://localhost:3000/get-maze`); // requests json from http server
-        data = await rawResponse.json();
+        var data = await rawResponse.json();
     }
     catch (err) {
         alert('Cannot reach server.\n\n' + err)
@@ -11,11 +11,18 @@
     maze_width = data.hw[1]
 
     maze_array = [] // 2D array of all squares
+    rows_array = []
 
     function drawMaze(width, height) { // (int, int) 
 
         for (let i = 0; i < maze_array.length; i++) {
-            maze_array[i].remove()
+            for (let j = 0; j < maze_array[i].length; j++) {
+                maze_array[i][j].remove()
+            }
+        }
+
+        for (let i = 0; i < rows_array.length; i++) {
+            rows_array[i].remove()
         }
         maze_array = []
 
@@ -24,7 +31,7 @@
         maze_length_pixels = window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight;
         maze_length_pixels *= 0.8
 
-        for (let row = 0; row < maze_height; row++) {
+        for (let row = 0; row < height; row++) {
 
             row_array = []
             row_div = document.createElement('div')
@@ -43,6 +50,7 @@
                 row_div.appendChild(square)
             }
             maze_array.push(row_array)
+            rows_array.push(row_div)
             document.getElementById('maze').appendChild(row_div)
         }
     }
@@ -60,9 +68,8 @@
 
     function drawCoords(coords, color) {  // ([], str)
         // Draws any passed coordinates (in this case the path) in any given colour
+        console.log(coords)
         for (let i = 0; i < coords.length; i++) {
-            console.log(`${coords[i][0]},${coords[i][1]}`)
-
             setTimeout(() => {
                 square = document.getElementsByClassName(`${coords[i][0]},${coords[i][1]}`)[0]
                 square.style.transition = '0.2s'
@@ -71,6 +78,7 @@
         }
     }
 
+    button = document.getElementById('solve-button')
     function handleSolveButton() {
         // On 'solve' button press
         try {
@@ -80,19 +88,26 @@
             alert('Path invalid.')
         }
     }
-    document.getElementById('solve-button').addEventListener('click', handleSolveButton)
+    button.onclick = function () { handleSolveButton(data.path) }
+
+    function getData() {
+        return data.path
+    }
 
     async function listenForNewMaze() {
         // Waits for server to respond with a new maze, when it is updated (12 hours max)
         const rawResponse = await fetch(`http://localhost:3000/listen-for-maze`);
-        var data = await rawResponse.json();
+        data = await rawResponse.json();
 
         try {
             drawMaze(data.hw[1], data.hw[0])
             drawFromArray(data.maze, { 0: 'white', 1: 'black', 2: 'green', 3: 'yellow' })
+            //setTimeout(() => {
+            //    drawCoords(data.path, 'red')
+            //}, 1000)
         }
-        catch {
-            alert('Recieved invalid maze from server.')
+        catch (err) {
+            alert('Recieved invalid maze from server.\n\n' + err)
         }
 
         listenForNewMaze()

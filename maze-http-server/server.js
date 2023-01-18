@@ -114,7 +114,6 @@ app.get('/', (req, res) => {
 
     if (Object.keys(req.query).length == 2) {
         if (sha256(req.query.password) == '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8') {
-            // 5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8
             // 9fc0e33c3844162ab66cde683f29d6da851aa6ede83fbf1217d598f7391a95f9
 
             maze_data = req.query.maze; // get original query as string

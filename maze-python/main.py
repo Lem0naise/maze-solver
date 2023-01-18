@@ -116,6 +116,7 @@ def write_json():
     }
     # open link in web browser
     pw = "password"
-    webbrowser.open('http://localhost:3000?password=' + pw + '&maze='+ json.dumps(write_dic))
+    print('http://localhost:3000?password=' + pw + '&maze='+ json.dumps(write_dic))
+    #webbrowser.open('http://localhost:3000?password=' + pw + '&maze='+ json.dumps(write_dic))
 
 write_json();
