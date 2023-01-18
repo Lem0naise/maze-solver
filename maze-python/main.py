@@ -106,7 +106,7 @@ maze = [
 solver = MazeSolver(maze);
 
 
-# writing json file
+# sending maze & path to server
 def write_json():
     height, width = len(maze), len(maze[0]);
     write_dic = {
@@ -116,7 +116,6 @@ def write_json():
     }
     # open link in web browser
     pw = "password"
-    print('http://localhost:3000?password=' + pw + '&maze='+ json.dumps(write_dic))
-    #webbrowser.open('http://localhost:3000?password=' + pw + '&maze='+ json.dumps(write_dic))
+    webbrowser.open('http://localhost:3000?password=' + pw + '&maze='+ json.dumps(write_dic))
 
 write_json();
