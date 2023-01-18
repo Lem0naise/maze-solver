@@ -90,10 +90,6 @@
     }
     button.onclick = function () { handleSolveButton(data.path) }
 
-    function getData() {
-        return data.path
-    }
-
     async function listenForNewMaze() {
         // Waits for server to respond with a new maze, when it is updated (12 hours max)
         const rawResponse = await fetch(`http://localhost:3000/listen-for-maze`);
@@ -102,9 +98,6 @@
         try {
             drawMaze(data.hw[1], data.hw[0])
             drawFromArray(data.maze, { 0: 'white', 1: 'black', 2: 'green', 3: 'yellow' })
-            //setTimeout(() => {
-            //    drawCoords(data.path, 'red')
-            //}, 1000)
         }
         catch (err) {
             alert('Recieved invalid maze from server.\n\n' + err)
