@@ -94,16 +94,24 @@ app.get('/maze', (req, res) => {
 // 'http://localhost:3000?password=[password]&maze=[maze]', where password = str and maze = {}
 app.get('/', (req, res) => {
     res.setHeader('Content-Type', 'text/plain');
-    if (sha256(req.query.password) == '9fc0e33c3844162ab66cde683f29d6da851aa6ede83fbf1217d598f7391a95f9') {
-        maze_data = req.query.maze
 
-        res.status(200); // ok!
-        res.end('Maze updated to:\n\n' + maze_data)
-    } 
+    if (Object.keys(req.query).length == 2) {
+        if (sha256(req.query.password) == '9fc0e33c3844162ab66cde683f29d6da851aa6ede83fbf1217d598f7391a95f9') {
+            maze_data = req.query.maze
+    
+            res.status(200); // ok!
+            res.end('Maze updated to:\n\n' + maze_data)
+        } 
+        else {
+            res.status(403); // forbidden
+            res.end('Forbidden.')
+        }
+    }
     else {
         res.status(403); // forbidden
         res.end('Forbidden.')
     }
+    
 })
 
 // run app, i.e. listen for reqs on port PORT

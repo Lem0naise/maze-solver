@@ -58,7 +58,7 @@
             
             setTimeout(()=>{
                 square = document.getElementsByClassName(`${coords[i][0]},${coords[i][1]}`)[0]
-                square.style.transition = '0.1s'
+                square.style.transition = '0.2s'
                 square.style.backgroundColor = color;
             }, 20*i)
         }
@@ -69,6 +69,8 @@
         drawCoords(data.path, 'red')
     }
     document.getElementById('solve-button').addEventListener('click', handleSolveButton)
+
+    
 })();
 
 // <3
