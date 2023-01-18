@@ -85,7 +85,6 @@ app.use(function (req, res, next) {
 
 // if url ends in '/get-maze', server will return the current maze data
 app.get('/get-maze', (req, res) => {
-
     res.setHeader('Content-Type', 'application/json');
     res.write(JSON.stringify(maze_data));
     res.status(200);
@@ -122,12 +121,26 @@ app.get('/', (req, res) => {
             maze_data = JSON.parse(maze_data); // parse the string into an [Object object]
             maze_number += 1
 
-            res.status(200); // ok!
+            res.status(201); // created!
             res.end('Maze updated to:\n\n' + JSON.stringify(maze_data)); // output stringified Object
         }
         else {
             res.status(403); // forbidden
             res.end('Forbidden.')
+        }
+    }
+    else if (Object.keys(req.query).length == 1) {
+        try {
+            x = req.query.password
+        } catch {
+            res.status(403); // forbidden
+            res.end('Forbidden.')
+        }
+        try {
+            x = req.query.maze
+        } catch {
+            res.status(404); // not found
+            res.end('Maze not provided.')
         }
     }
     else {
