@@ -4,48 +4,77 @@ import cv2
 # opencv2 uses BGR colours, not RGB
 # coordinates are in (y, x) format not (x, y)
 
+# this is how you draw markers on the frame
+#cv2.drawMarker(frame, (width//2, height//2), color=(0, 0, 255), markerType=cv2.MARKER_CROSS, thickness=3, markerSize=50)
+
+
 cap = cv2.VideoCapture(0)
 
 cap.set(3, 16)
 cap.set(4, 9)
 
-number = 40000
+SENSITIVITY = 40000
+PIXEL_SKIP = 3 # skip every third pixel
+
+DEV_SENSITIVITY = 60;
+# predefined green
+G_B = 120
+G_G = 210
+G_R = 160
+
+# read first frame to get dimensions
+ret, frame = cap.read()
+height, width = frame.shape[:2]
+
 
 while(True):
-      
+    
+    # read current frame
     ret, frame = cap.read()
-    height, width = frame.shape[:2]
 
-
-    # my first attempt at making all 'white' pixels red
-    for y in range(0, height, 3):
-        for x in range(0, width, 3):
-            (b, g, r) = frame[y, x] # (b,g,r)
-            
-            if (float(r) + float(g) + float(b) > 140*3) and ((float(r**2 + g**2 + b**2)/3.0) - (float(r + g + b)/3.0)**2) < number:
-
-                for i in range(y-1, y+1):
-                    for j in range(x-1, x+1):
-                        frame[i, j] = (0, 0, 255)
-        
+    inside_border = False
     
-    # this is how you draw markers on the frame
-    #cv2.drawMarker(frame, (width//2, height//2), color=(0, 0, 255), markerType=cv2.MARKER_CROSS, thickness=3, markerSize=50)
+    # changing BGR into HSV colour
+    cv2.cvtColor(frame, 40, frame) 
+    channels = None
+    h, s, v = cv2.split(frame)
     
+
+
+    # iterate through pixels
+    #for y in range(0, height):
+    #    for x in range(0, width):
+
+    #        h[y, x] = 0;
+    #        #s[y, x] = 0;
+    #        v[y, x] = 0;
+
+    
+    # merge colours back down into frame
+    #frame = cv2.merge([h, s, v])
+
+
+    lower_thres = 50
+    higher_thres = 150
+
+    edge = cv2.Canny(s, lower_thres, higher_thres)
+    contours, hier = cv2.findContours(edge, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+    cv2.drawContours(frame, contours, -1, (255, 0, 0), 3)
+
     # displays frame
-    cv2.imshow('frame', frame)
+    cv2.imshow("frame", frame)
     
     # when q clicked, kill program
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
     if cv2.waitKey(1) & 0xFF == ord('i'):
-        number += 100
-        print(number)
+        DEV_SENSITIVITY += 10
+        print(DEV_SENSITIVITY)
 
     if cv2.waitKey(1) & 0xFF == ord('k'):
-        number -= 100
-        print(number)
+        DEV_SENSITIVITY -= 10
+        print(DEV_SENSITIVITY)
   
 # After the loop release the cap(ture) object
 cap.release()
