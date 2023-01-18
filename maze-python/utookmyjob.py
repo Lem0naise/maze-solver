@@ -9,24 +9,25 @@ class Outputter:
 		self.draw(self.o_maze)
 	def draw(self, maze):
 		self.window = tkinter.Tk()
-		self.canvas = tkinter.Canvas(self.window, width=500, height=500, bg='White', highlightthickness=1, highlightbackground='White')
+		screen_dim = self.window.winfo_screenheight()-100
+		height, width = len(maze), len(maze[0])
+		self.xdens = screen_dim / width
+		self.ydens = screen_dim / height
+		self.window.geometry(f'{screen_dim}x{screen_dim}')
+		self.canvas = tkinter.Canvas(self.window, width=screen_dim, height=screen_dim, bg='White')
 		self.canvas.pack()
-		self.dens = 500 / 30
-		for i in range(30):
-			self.canvas.create_line(0, i * self.dens, 500, i * self.dens)
-			self.canvas.create_line(i * self.dens, 0, i * self.dens, 500)
-		for x in range(30):
-			for y in range(30):
+		for x in range(width):
+			for y in range(height):
+				if maze[y][x]== 0:
+					self.canvas.create_rectangle(x*self.xdens, y*self.ydens, (x+1)*self.xdens, (y+1)*self.ydens, fill='White',outline='White') 
 				if maze[y][x]== 1:
-					self.canvas.create_rectangle(x*self.dens, y*self.dens, (x+1)*self.dens, (y+1)*self.dens, fill='Black')
-				if maze[y][x]== 2:
-					self.canvas.create_rectangle(x*self.dens, y*self.dens, (x+1)*self.dens, (y+1)*self.dens, fill='Gold')
-				if maze[y][x]== 3:
-					self.canvas.create_rectangle(x*self.dens, y*self.dens, (x+1)*self.dens, (y+1)*self.dens, fill='Gold')
-		self.window.update()
+					self.canvas.create_rectangle(x*self.xdens, y*self.ydens, (x+1)*self.xdens, (y+1)*self.ydens, fill='Black',outline='Black')
+				if maze[y][x]== 2 or maze[y][x]== 3:
+					self.canvas.create_rectangle(x*self.xdens, y*self.ydens, (x+1)*self.xdens, (y+1)*self.ydens, fill='Gold',outline='Gold')
 
 	def solve(self):
 		for y,x in self.path:
 			self.window.update()
-			self.canvas.create_rectangle(x*self.dens, y*self.dens, (x+1)*self.dens, (y+1)*self.dens, fill='Green')
+			self.canvas.create_rectangle(x*self.xdens, y*self.ydens, (x+1)*self.xdens, (y+1)*self.ydens, fill='Green',outline='Green')
 			sleep(self.delay)
+		self.window.mainloop()
