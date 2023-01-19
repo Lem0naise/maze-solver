@@ -6,7 +6,7 @@ import webbrowser
 
 # 2 is start
 # 3 is end
-'''
+
 maze = [
 [1, 1, 0, 0, 2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1],
 [0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0],
@@ -102,6 +102,7 @@ maze = [
     [1, 0, 0, 0, 0, 3, 0, 0, 1,]
     
 ]
+'''
 
 solver = MazeSolver(maze);
 
@@ -115,7 +116,42 @@ def write_json():
         "maze":maze,
     }
     # open link in web browser
-    pw = "password"
-    webbrowser.open('http://localhost:3000?password=' + pw + '&maze='+ json.dumps(write_dic))
+    host = "http://localhost:3000/"
+    password = "password"
+    total_packet_num = 0
+    current_packet_num = 0
+
+
+    url = host + '?pw=' +  password + '&pkts=[' + '0'*(3-len(str(total_packet_num))) + str(total_packet_num) + ',' + '0'*(3-len(str(current_packet_num))) + str(current_packet_num) + ']' + '&mz='
+
+    max_pkt_len = 1024 - len(url)
+    write_dic_str = json.dumps(write_dic)
+
+    packets = [write_dic_str[i:i+max_pkt_len] for i in range(0, len(write_dic_str), max_pkt_len)]
+
+
+    print()
+    print(url)
+    print('Sending packets of size ' + str(max_pkt_len) + ' chars (' + str((max_pkt_len*8)//1000) + ' kb).')
+    print('Sending ' + str(len(packets)) + ' packets.')
+
+    total_packet_num = len(packets)
+
+    for i in range(len(packets)):
+        pkt = packets[i]
+        current_packet_num = i
+
+        url = host + '?pw=' +  password + '&pkts=[' + '0'*(3-len(str(total_packet_num))) + str(total_packet_num) + ',' + '0'*(3-len(str(current_packet_num))) + str(current_packet_num) + ']' + '&mz=' + str(pkt)
+
+        webbrowser.open(url)
+
+    #for i in packets:
+    #    print('"' + i + '"\n')
+
+
+
+
+
+    #webbrowser.open(url + write_dic_str)
 
 write_json();

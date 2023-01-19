@@ -108,25 +108,46 @@ app.get('/listen-for-maze', (req, res) => {
 })
 
 // if url is root (i.e. ends in '/'), server will try to update the maze, pswrd and maze must be provided, like this:
-// 'http://localhost:3000?password=[password]&maze=[maze]', where password = str and maze = {}
+// 'http://localhost:3000?pw=[password]&mz=[maze]&pkts=[total, current]'
+// where pw (password) = str, mz (maze) = {}, and pkts (packets) = [total no. of pkts, current pkt]
+var expectedpacket = 0
+var temp = ''
 app.get('/', (req, res) => {
     res.setHeader('Content-Type', 'text/plain');
 
-    if (Object.keys(req.query).length == 2) {
-        if (sha256(req.query.password) == '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8') {
-            // 9fc0e33c3844162ab66cde683f29d6da851aa6ede83fbf1217d598f7391a95f9
+    if (Object.keys(req.query).length == 3) {
+        if (sha256(req.query.pw + 'CgFr6ZXtTL') == 'd6201b03f4a5cba84c9b892386097039734adc44f3ec6a04c3821aad537854e8') {
 
-            maze_data = req.query.maze; // get original query as string
-            maze_data = maze_data.replaceAll("%2522", '"').replaceAll("%22", '"'); // decode ASCII encoding
-            maze_data = JSON.parse(maze_data); // parse the string into an [Object object]
-            maze_number += 1
+            if (req.query.pkts[0] == 0 && expectedpacket == 0) {
+
+                maze_data = req.query.mz; // get original query as string
+                maze_data = maze_data.replaceAll("%2522", '"').replaceAll("%22", '"'); // decode ASCII encoding
+                maze_data = JSON.parse(maze_data); // parse the string into an [Object object]
+                maze_number += 1
+
+            } else {
+                packet = req.query.mz; // get original query as string
+                packet = packet.replaceAll("%2522", '"').replaceAll("%22", '"'); // decode ASCII encoding
+
+                temp += packet
+                if (req.query.pkts[0] != req.query.pkts[1]) {
+                    expectedpacket += 1
+                } else {
+                    console.log(temp)
+                    maze_data = temp
+                    maze_data = JSON.parse(maze_data);
+
+                    expectedpacket = 0
+                }
+
+            }
 
             res.status(201); // created!
             res.end('Maze updated to:\n\n' + JSON.stringify(maze_data)); // output stringified Object
         }
         else {
             res.status(403); // forbidden
-            res.end('Forbidden.')
+            res.end('Forbidden. Wrong Password.')
         }
     }
     else if (Object.keys(req.query).length == 1) {
@@ -134,7 +155,7 @@ app.get('/', (req, res) => {
             x = req.query.password
         } catch {
             res.status(403); // forbidden
-            res.end('Forbidden.')
+            res.end('Forbidden. No Password.')
         }
         try {
             x = req.query.maze
@@ -145,7 +166,7 @@ app.get('/', (req, res) => {
     }
     else {
         res.status(403); // forbidden
-        res.end('Forbidden.')
+        res.end('Forbidden. Wrong number of queries.')
     }
 
 })
