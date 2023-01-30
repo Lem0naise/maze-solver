@@ -31,14 +31,15 @@ while(True):
     
     # read current frame
     ret, frame = cap.read()
+    
+    #frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV); #changing BGR into HSV colour
+    light_green = (146, 191, 96);
+    dark_green = (26, 53, 16);
 
-    inside_border = False
+    # creating a 1,0 mask with any colours that resemble green
+    mask = cv2.inRange(frame, dark_green, light_green);
     
-    # changing BGR into HSV colour
-    cv2.cvtColor(frame, 40, frame) 
-    channels = None
-    h, s, v = cv2.split(frame)
-    
+    #result = cv2.bitwise_and(frame, frame, mask=mask); # only enable green pixels
 
 
     # iterate through pixels
@@ -57,9 +58,10 @@ while(True):
     lower_thres = 50
     higher_thres = 150
 
-    edge = cv2.Canny(s, lower_thres, higher_thres)
-    contours, hier = cv2.findContours(edge, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-    cv2.drawContours(frame, contours, -1, (255, 0, 0), 3)
+    # finding edges
+    #edge = cv2.Canny(s, lower_thres, higher_thres)
+    #contours, hier = cv2.findContours(edge, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+    #cv2.drawContours(frame, contours, -1, (255, 0, 0), 3)
 
     # displays frame
     cv2.imshow("frame", frame)
