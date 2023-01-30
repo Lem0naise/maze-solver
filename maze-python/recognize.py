@@ -39,9 +39,10 @@ while(True):
     # creating a 1,0 mask with any colours that resemble green
     mask = cv2.inRange(frame, dark_green, light_green);
     
-    #result = cv2.bitwise_and(frame, frame, mask=mask); # only enable green pixels
+    frame = cv2.bitwise_and(frame, frame, mask=mask); # only enable green pixels
 
-
+    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY);
+    
     # iterate through pixels
     #for y in range(0, height):
     #    for x in range(0, width):
