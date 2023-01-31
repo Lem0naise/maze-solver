@@ -41,7 +41,13 @@ while(True):
     
     frame = cv2.bitwise_and(frame, frame, mask=mask); # only enable green pixels
 
-    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY);
+    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY); # image to greyscale
+
+
+    # thresholding greyscale into b&w
+    lower_thres = 70    
+    upper_thres = 255
+    (thresh, frame) = cv2.threshold(frame, lower_thres, upper_thres, cv2.THRESH_BINARY);
     
     # iterate through pixels
     #for y in range(0, height):
@@ -56,8 +62,6 @@ while(True):
     #frame = cv2.merge([h, s, v])
 
 
-    lower_thres = 50
-    higher_thres = 150
 
     # finding edges
     #edge = cv2.Canny(s, lower_thres, higher_thres)
