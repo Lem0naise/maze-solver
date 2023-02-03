@@ -16,12 +16,6 @@ cap.set(4, 9)
 SENSITIVITY = 40000
 PIXEL_SKIP = 3 # skip every third pixel
 
-DEV_SENSITIVITY = 60;
-# predefined green
-G_B = 120
-G_G = 210
-G_R = 160
-
 # read first frame to get dimensions
 ret, frame = cap.read()
 height, width = frame.shape[:2]
@@ -36,37 +30,22 @@ while(True):
     light_green = (146, 191, 96);
     dark_green = (26, 53, 16);
 
-    # creating a 1,0 mask with any colours that resemble green
+    # creating a 1 to 0 mask with any colours that resemble green
     mask = cv2.inRange(frame, dark_green, light_green);
     
     frame = cv2.bitwise_and(frame, frame, mask=mask); # only enable green pixels
 
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY); # image to greyscale
 
-
     # thresholding greyscale into b&w
-    lower_thres = 70    
-    upper_thres = 255
-    (thresh, frame) = cv2.threshold(frame, lower_thres, upper_thres, cv2.THRESH_BINARY);
+    lower_thres = 70 # 70/255 minimum greenity
+    (thresh, frame) = cv2.threshold(frame, lower_thres, 255, cv2.THRESH_BINARY);
     
-    # iterate through pixels
-    #for y in range(0, height):
-    #    for x in range(0, width):
 
-    #        h[y, x] = 0;
-    #        #s[y, x] = 0;
-    #        v[y, x] = 0;
-
-    
-    # merge colours back down into frame
-    #frame = cv2.merge([h, s, v])
-
-
-
-    # finding edges
-    #edge = cv2.Canny(s, lower_thres, higher_thres)
-    #contours, hier = cv2.findContours(edge, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-    #cv2.drawContours(frame, contours, -1, (255, 0, 0), 3)
+    # iterate through every pixel 
+    for y in range(0, height):
+        for x in range(0, width):
+            pass
 
     # displays frame
     cv2.imshow("frame", frame)
@@ -75,13 +54,6 @@ while(True):
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-    if cv2.waitKey(1) & 0xFF == ord('i'):
-        DEV_SENSITIVITY += 10
-        print(DEV_SENSITIVITY)
-
-    if cv2.waitKey(1) & 0xFF == ord('k'):
-        DEV_SENSITIVITY -= 10
-        print(DEV_SENSITIVITY)
   
 # After the loop release the cap(ture) object
 cap.release()
