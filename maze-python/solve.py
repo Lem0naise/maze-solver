@@ -8,6 +8,11 @@ class MazeSolver:
         start, end = None, None;
         for i in range(len(n_maze)):
             for j in range(len(n_maze[i])):
+
+                # set any 255 to 1
+                if n_maze[i][j] == 255:
+                    n_maze[i][j] = 1
+
                 if n_maze[i][j] == 2:
                     start = (i, j)
                     n_maze[i][j] = 0;
@@ -30,9 +35,12 @@ class MazeSolver:
             
         maze = []
         for i in range(len(maze_in)):
+
             maze.append([])
             for j in range(len(maze_in[i])):
                 maze[-1].append(0)
+
+    
         s1, s2 = start;
         maze[s1][s2] = 1; # set starting point as "1" minimum path length
         e1, e2 = end;
@@ -40,18 +48,22 @@ class MazeSolver:
         step = 0;
         while maze[e1][e2] == 0: # while end not pathfound to
             step += 1;
+            if step % 1000 == 0:
+                print(step)
             self._move(maze, maze_in, step);
 
+        print("Returned maze")
         return maze;
+
 
     def _move(self, maze, maze_input, step):
         for i in range(len(maze)):
             for j in range(len(maze[i])):
+                
                 if maze[i][j] == step: # if cell is within reach
 
                     # {guard clause} and {if we have not reached the cell yet} and {there is no wall}
                     # then: set cell to NEXT STEP
-
                     if i>0 and maze[i-1][j] == 0 and maze_input[i-1][j] == 0: # cell North
                         maze[i-1][j] = step + 1;
 
