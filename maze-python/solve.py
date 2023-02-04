@@ -6,6 +6,7 @@ class MazeSolver:
         n_maze = deepcopy(maze);
         
         start, end = None, None;
+        print("Finding start and end.")
         for i in range(len(n_maze)):
             for j in range(len(n_maze[i])):
 
@@ -22,35 +23,43 @@ class MazeSolver:
 
                 if start and end:
                     break;
+        print("Found start and end.")
 
-        print("Scanning maze...");
+        print("Populating maze...")
         pop_maze = self._populate_maze(n_maze, start, end);
+        print("Populated maze.")
+
         print("Pathing through maze...");
         self.path = self._path_maze(pop_maze, end); # final path
+        print("Pathed through maze.");
+        print(self.path)
+        
         self.path.reverse();
 
 
 
     def _populate_maze(self, maze_in, start, end):
             
+
+        # numpy.zeros()
         maze = []
         for i in range(len(maze_in)):
-
             maze.append([])
             for j in range(len(maze_in[i])):
                 maze[-1].append(0)
 
     
-        s1, s2 = start;
-        maze[s1][s2] = 1; # set starting point as "1" minimum path length
-        e1, e2 = end;
 
-        step = 0;
-        while maze[e1][e2] == 0: # while end not pathfound to
-            step += 1;
+        sy, sx = start;
+        maze[sy][sx] = 1; # set starting point as "1" minimum path length
+        ey, ex = end;
+
+        step = 0; # distance from start
+        while maze[ey][ex] == 0: # while end not pathfound to
             if step % 1000 == 0:
-                print(step)
+                print("step:", step)
             self._move(maze, maze_in, step);
+            step += 1;
 
         print("Returned maze")
         return maze;
@@ -61,7 +70,7 @@ class MazeSolver:
             for j in range(len(maze[i])):
                 
                 if maze[i][j] == step: # if cell is within reach
-
+   
                     # {guard clause} and {if we have not reached the cell yet} and {there is no wall}
                     # then: set cell to NEXT STEP
                     if i>0 and maze[i-1][j] == 0 and maze_input[i-1][j] == 0: # cell North
@@ -83,24 +92,24 @@ class MazeSolver:
         #it is actually the end of the maze
 
         path = [];
-        s1, s2 = start;
-        step = pop_maze[s1][s2]; # set path limit
+        sy, sx = start;
+        step = pop_maze[sy][sx]; # set path limit
 
         while step > 2:
 
-            if s1>0 and pop_maze[s1-1][s2] == step-1: # cell North
-                s1 -= 1;
+            if sy>0 and pop_maze[sy-1][sx] == step-1: # cell North
+                sy -= 1;
 
-            elif s1<len(pop_maze)-1 and pop_maze[s1+1][s2] == step-1: # cell South
-                s1 += 1;
+            elif sy<len(pop_maze)-1 and pop_maze[sy+1][sx] == step-1: # cell South
+                sy += 1;
 
-            elif s2>0 and pop_maze[s1][s2-1] == step-1: # cell West
-                s2 -= 1;
+            elif sx>0 and pop_maze[sy][sx-1] == step-1: # cell West
+                sx -= 1;
             
-            elif s2<len(pop_maze)-1 and pop_maze[s1][s2+1] == step-1: # cell East
-                s2 += 1;
+            elif sx<len(pop_maze)-1 and pop_maze[sy][sx+1] == step-1: # cell East
+                sx += 1;
 
-            path.append((s1, s2));
+            path.append((sy, sx));
             step -= 1;
 
         return path;

@@ -111,12 +111,18 @@ while frame.any() == None:
     frame = recogniser.frame;
 maze = frame;
 
-solver = MazeSolver(maze);
+height = len(maze)
+width = len(maze[0])
+
+solver = MazeSolver(maze); # here is where brakeing
 
 recogniser.draw(solver.path)
 
 #outputter = Outputter(maze, solver.path);
 #outputter.solve();
+
+
+
 
 # sending maze & path to server
 def write_json():

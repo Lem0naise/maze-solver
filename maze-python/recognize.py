@@ -13,13 +13,13 @@ WIDTH = 200
 class Recogniser:
 
     def draw(self, path):
+
         print("drawing")
         for coord in path:
-            print(coord)
             cv2.drawMarker(self.frame, coord, color=(0, 0, 255), markerType=cv2.MARKER_CROSS, thickness=3, markerSize=50)
         
         while True:
-            print('showing fr fr')
+            #print('showing fr fr')
             cv2.imshow("frame", self.frame)
 
     def start_end(self, event,x,y,flags,param):
