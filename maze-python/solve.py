@@ -47,6 +47,8 @@ class MazeSolver:
 
     def _draw(self, frame, path):
 
+        delay = 4
+
         for i in range(len(path)):
 
 
@@ -55,8 +57,9 @@ class MazeSolver:
                 for y in range(-1, 2):
                     frame[path[i][0]+y, path[i][1]+x] = (255, 0, 0)# setting the path pixels to blue
 
-            cv2.imshow("frame", frame) # showing the frame
-            cv2.waitKey(1) # required wait statement 
+            if i%delay == 0:
+                cv2.imshow("frame", frame) # showing the frame
+                cv2.waitKey(1) # required wait statement 
 
         cv2.waitKey(0)
 
