@@ -47,16 +47,23 @@ class MazeSolver:
 
     def _draw(self, frame, path):
 
-        delay = 4
+        delay = 2
 
         for i in range(len(path)):
 
 
             # three blocks around
-            for x in range(-1, 2):
-                for y in range(-1, 2):
-                    frame[path[i][0]+y, path[i][1]+x] = (255, 0, 0)# setting the path pixels to blue
+            # TODO will index error
+            for x in range(-3, 4):
+                for y in range(-3, 4):
 
+                    sum = 0
+                    for j in frame[path[i][0]+y, path[i][1]+x]:
+                        sum+=j
+                    
+                    if sum != 0:
+                        frame[path[i][0]+y, path[i][1]+x] = (255, 0, 0) # setting the path pixels to blue
+           
             if i%delay == 0:
                 cv2.imshow("frame", frame) # showing the frame
                 cv2.waitKey(1) # required wait statement 

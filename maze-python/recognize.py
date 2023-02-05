@@ -1,8 +1,8 @@
 import cv2
 import time
 
-HEIGHT = 400
-WIDTH = 400
+HEIGHT = 200
+WIDTH = 200
 # NB
 # opencv2 uses BGR colours, not RGB
 # coordinates are in (y, x) format not (x, y)
@@ -71,7 +71,7 @@ class Recogniser:
             # read current self.frame
             ret, self.frame = cap.read()
             self.frame = cv2.resize(self.frame, (HEIGHT, WIDTH))
-            
+
             # white thresholds
             white = (255, 255, 255);
             dark_white = (160, 160, 160);
