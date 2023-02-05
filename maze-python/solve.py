@@ -50,19 +50,7 @@ class MazeSolver:
         self.recogniser.frame = cv2.cvtColor(self.recogniser.frame, cv2.COLOR_GRAY2RGB)
         
         # invert image
-         
-        im = Image.fromarray(maze_in)
-
-        im.save("filebefore.jpeg")
         maze_in  = numpy.where((maze_in==0)|(maze_in==1), maze_in^1, maze_in)
-
-        im = Image.fromarray(maze_in)
-        im.save("file.jpeg")
-
-        print("that was top left")
-
-
-
 
         # numpy.zeros()
         maze = []
@@ -79,6 +67,8 @@ class MazeSolver:
         step = 1; # distance from start
 
         # TODO stuck in this while loop
+        # TODO the blueness is not going anywhere below the end
+        
         while maze[ey][ex] == 0: # while end not pathfound to (while still is an empty cell)
 
             self._move(maze, maze_in, step);

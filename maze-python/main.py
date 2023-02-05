@@ -116,7 +116,6 @@ width = len(maze[0])
 
 solver = MazeSolver(maze, recogniser);
 
-
 # recogniser.draw(solver.path)
 
 #outputter = Outputter(maze, solver.path);
