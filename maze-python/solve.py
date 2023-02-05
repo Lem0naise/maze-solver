@@ -20,15 +20,16 @@ class MazeSolver:
                 if n_maze[i][j] == 255:
                     n_maze[i][j] = 1
 
-                if n_maze[i][j] == 2:
+                if n_maze[i][j] == 2: # if it is start
                     start = (i, j)
-                    n_maze[i][j] = 0;
-                if n_maze[i][j] == 3:
+                    n_maze[i][j] = 0; # set start to 0
+                if n_maze[i][j] == 3: # if it is end
                     end = (i, j);
-                    n_maze[i][j] = 0;
+                    n_maze[i][j] = 0; # set end to 0
 
                 if start and end:
                     break;
+        
         print("Found start and end.")
 
         print("Populating maze...")
@@ -38,10 +39,26 @@ class MazeSolver:
         print("Pathing through maze...");
         self.path = self._path_maze(pop_maze, end); # final path
         print("Pathed through maze.");
-        print(self.path)
 
         self.path.reverse();
+    
+        self._draw(self.recogniser.frame, self.path) # draw on the image
 
+
+    def _draw(self, frame, path):
+
+        for i in range(len(path)):
+
+
+            # three blocks around
+            for x in range(-1, 2):
+                for y in range(-1, 2):
+                    frame[path[i][0]+y, path[i][1]+x] = (255, 0, 0)# setting the path pixels to blue
+
+            cv2.imshow("frame", frame) # showing the frame
+            cv2.waitKey(1) # required wait statement 
+
+        cv2.waitKey(0)
 
 
     def _populate_maze(self, maze_in, start, end):
@@ -62,19 +79,20 @@ class MazeSolver:
 
         sy, sx = start;
         maze[sy][sx] = 1; # set starting point as "1" minimum path length
-        ey, ex = end;
+        
+        ey, ex = end; # TODO doesn't even change anything if i switch x and y
+
+        maze_in[ey][ex] = 0 # set the end to 0
 
         step = 1; # distance from start
-
-        # TODO stuck in this while loop
-        # TODO the blueness is not going anywhere below the end
 
         height = len(maze)
         width = len(maze[0])
 
+        # TODO stuck in this while loop
         while maze[ey][ex] == 0: # while end not pathfound to (while still is an empty cell)
 
-            self._move(maze, maze_in, step, height, width);
+            self._move(maze, maze_in, step, height, width)
             step += 1; # increment distance
 
         return maze;
@@ -83,9 +101,11 @@ class MazeSolver:
     def _move(self, maze, maze_input, step, height, width): # maze is the populating maze, and maze_input is the actual image
         
         # go through whole maze to find cells which match the current step
-        for i in range(len(maze)):
-            for j in range(len(maze[i])):
-    
+        for i in range(height):
+            for j in range(width):
+
+                # TODO problem is that: i > ey is never true as well as the if statement below
+ 
                 if maze[i][j] == step: # if cell is within reach (match the current distance / step)
                     
                     # {guard clause} and {if we have not reached the cell yet} and {there is no wall}
@@ -103,11 +123,12 @@ class MazeSolver:
                         maze[i][j+1] = step + 1;
 
 
-                    self.recogniser.frame[i, j] = (255, 0, 0) # setting the checked pixels to blue (mostly debug for now)
+                    # TODO this is showing while populating, you want to show only when pathfinding
+                    #self.recogniser.frame[i, j] = (255, 0, 0) # setting the checked pixels to blue (mostly debug for now)
 
-                    if j%5 == 0: # show every 5 frames
+                    if j%10 == 0 and False: # show every 10 frames 
                         cv2.imshow("frame", self.recogniser.frame) # showing the frame
-                        cv2.waitKey(1) # required wait statement
+                        cv2.waitKey(1) # required wait statement 
 
 
 
