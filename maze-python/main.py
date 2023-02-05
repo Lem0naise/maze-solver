@@ -1,5 +1,6 @@
 from solve import MazeSolver;
 from output import Outputter;
+from recognize import Recogniser;
 from time import sleep;
 import json
 import webbrowser
@@ -103,7 +104,24 @@ maze = [
     
 ]
 
-solver = MazeSolver(maze);
+recogniser = Recogniser();
+print('finished with recogniser')
+frame = recogniser.frame;
+while frame.any() == None:
+    frame = recogniser.frame;
+maze = frame;
+
+height = len(maze)
+width = len(maze[0])
+
+solver = MazeSolver(maze, recogniser);
+
+# recogniser.draw(solver.path)
+
+#outputter = Outputter(maze, solver.path);
+#outputter.solve();
+
+
 
 
 # sending maze & path to server
@@ -118,4 +136,4 @@ def write_json():
     pw = "password"
     webbrowser.open('http://localhost:3000?password=' + pw + '&maze='+ json.dumps(write_dic))
 
-write_json();
+#write_json();
