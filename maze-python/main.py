@@ -114,9 +114,10 @@ maze = frame;
 height = len(maze)
 width = len(maze[0])
 
-solver = MazeSolver(maze); # here is where brakeing
+solver = MazeSolver(maze, recogniser);
 
-recogniser.draw(solver.path)
+
+# recogniser.draw(solver.path)
 
 #outputter = Outputter(maze, solver.path);
 #outputter.solve();

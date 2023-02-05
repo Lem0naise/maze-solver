@@ -1,8 +1,14 @@
 # zac
 from copy import deepcopy
+import cv2
+import time
+import numpy
+from PIL import Image
 
 class MazeSolver:
-    def __init__(self, maze):
+    def __init__(self, maze, recogniser):
+        self.recogniser = recogniser
+
         n_maze = deepcopy(maze);
         
         start, end = None, None;
@@ -33,13 +39,30 @@ class MazeSolver:
         self.path = self._path_maze(pop_maze, end); # final path
         print("Pathed through maze.");
         print(self.path)
-        
+
         self.path.reverse();
 
 
 
     def _populate_maze(self, maze_in, start, end):
             
+        # turn frame from black and white into rgb
+        self.recogniser.frame = cv2.cvtColor(self.recogniser.frame, cv2.COLOR_GRAY2RGB)
+        
+        # invert image
+         
+        im = Image.fromarray(maze_in)
+
+        im.save("filebefore.jpeg")
+        maze_in  = numpy.where((maze_in==0)|(maze_in==1), maze_in^1, maze_in)
+
+        im = Image.fromarray(maze_in)
+        im.save("file.jpeg")
+
+        print("that was top left")
+
+
+
 
         # numpy.zeros()
         maze = []
@@ -48,29 +71,31 @@ class MazeSolver:
             for j in range(len(maze_in[i])):
                 maze[-1].append(0)
 
-    
 
         sy, sx = start;
         maze[sy][sx] = 1; # set starting point as "1" minimum path length
         ey, ex = end;
 
-        step = 0; # distance from start
-        while maze[ey][ex] == 0: # while end not pathfound to
-            if step % 1000 == 0:
-                print("step:", step)
+        step = 1; # distance from start
+
+        # TODO stuck in this while loop
+        while maze[ey][ex] == 0: # while end not pathfound to (while still is an empty cell)
+
             self._move(maze, maze_in, step);
-            step += 1;
+            step += 1; # increment distance
 
         print("Returned maze")
         return maze;
 
 
-    def _move(self, maze, maze_input, step):
+    def _move(self, maze, maze_input, step): # maze is the populating maze, and maze_input is the actual image
+        
+        # go through whole maze to find cells which match the current step
         for i in range(len(maze)):
             for j in range(len(maze[i])):
-                
-                if maze[i][j] == step: # if cell is within reach
-   
+    
+                if maze[i][j] == step: # if cell is within reach (match the current distance / step)
+                    
                     # {guard clause} and {if we have not reached the cell yet} and {there is no wall}
                     # then: set cell to NEXT STEP
                     if i>0 and maze[i-1][j] == 0 and maze_input[i-1][j] == 0: # cell North
@@ -82,8 +107,13 @@ class MazeSolver:
                     if j>0 and maze[i][j-1] == 0 and maze_input[i][j-1] == 0: # cell West
                         maze[i][j-1] = step + 1;
                     
-                    if j<len(maze)-1 and maze[i][j+1] == 0 and maze_input[i][j+1] == 0: # cell East
+                    if j<len(maze[0])-1 and maze[i][j+1] == 0 and maze_input[i][j+1] == 0: # cell East
                         maze[i][j+1] = step + 1;
+
+
+                    self.recogniser.frame[i, j] = (255, 0, 0) # setting the checked pixels to blue
+                    cv2.imshow("frame", self.recogniser.frame) # showing the frame
+                    cv2.waitKey(1) # required wait statement
 
 
 

@@ -13,7 +13,7 @@ WIDTH = 200
 class Recogniser:
 
     def draw(self, path):
-
+        return
         print("drawing")
         for coord in path:
             cv2.drawMarker(self.frame, coord, color=(0, 0, 255), markerType=cv2.MARKER_CROSS, thickness=3, markerSize=50)
@@ -30,7 +30,7 @@ class Recogniser:
 
                 self.start = [y, x]                
 
-                print("have set start")
+                print("Start colour:", end="")
                 print(self.frame[self.start[0]][self.start[1]])
 
                 self.frame[self.start[0]][self.start[1]] = 2 # set start
@@ -39,7 +39,7 @@ class Recogniser:
 
                 self.end = [y, x]
 
-                print("have set end")
+                print("End colour:", end="")
                 print(self.frame[self.end[0]][self.end[1]])
                 
                 self.frame[self.end[0]][self.end[1]] = 3 # set end
@@ -60,15 +60,12 @@ class Recogniser:
 
         cv2.setMouseCallback("frame", self.start_end)
 
-        cap.set(3, 16)
-        cap.set(4, 9)
-
-        SENSITIVITY = 40000
-        PIXEL_SKIP = 3 # skip every third pixel
+        cap.set(3, 16) # setting width 
+        cap.set(4, 9) # and height
 
         # read first frame to get dimensions
         ret, self.frame = cap.read()
-        height, width = self.frame.shape[:2]
+        first_frame = self.frame
     
         while(True):
             # read current self.frame
@@ -104,13 +101,20 @@ class Recogniser:
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 self.waiting = True
                 time.sleep(1)
-                cv2.waitKey(-1); # wait for q to be pressed again
+                cv2.waitKey(0); # wait for q to be pressed again
                 break
-                            
+
+
+      
+        cap.release()
+        #cv2.destroyAllWindows()
+        #cv2.namedWindow("bob")
+        
+       
 
         # After the loop release the cap(ture) object
+        
 
-        #cap.release()
         # Destroy all the windows
         #cv2.destroyAllWindows()
 
