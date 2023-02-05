@@ -32,7 +32,7 @@ class MazeSolver:
         print("Found start and end.")
 
         print("Populating maze...")
-        pop_maze = self._populate_maze(n_maze, start, end);
+        pop_maze = self._populate_maze(n_maze, start, end); # TODO Stuck here
         print("Populated maze.")
 
         print("Pathing through maze...");
@@ -68,17 +68,19 @@ class MazeSolver:
 
         # TODO stuck in this while loop
         # TODO the blueness is not going anywhere below the end
-        
+
+        height = len(maze)
+        width = len(maze[0])
+
         while maze[ey][ex] == 0: # while end not pathfound to (while still is an empty cell)
 
-            self._move(maze, maze_in, step);
+            self._move(maze, maze_in, step, height, width);
             step += 1; # increment distance
 
-        print("Returned maze")
         return maze;
 
 
-    def _move(self, maze, maze_input, step): # maze is the populating maze, and maze_input is the actual image
+    def _move(self, maze, maze_input, step, height, width): # maze is the populating maze, and maze_input is the actual image
         
         # go through whole maze to find cells which match the current step
         for i in range(len(maze)):
@@ -91,19 +93,21 @@ class MazeSolver:
                     if i>0 and maze[i-1][j] == 0 and maze_input[i-1][j] == 0: # cell North
                         maze[i-1][j] = step + 1;
 
-                    if i<len(maze)-1 and maze[i+1][j] == 0 and maze_input[i+1][j] == 0: # cell South
+                    if i<height-1 and maze[i+1][j] == 0 and maze_input[i+1][j] == 0: # cell South
                         maze[i+1][j] = step + 1;
 
                     if j>0 and maze[i][j-1] == 0 and maze_input[i][j-1] == 0: # cell West
                         maze[i][j-1] = step + 1;
                     
-                    if j<len(maze[0])-1 and maze[i][j+1] == 0 and maze_input[i][j+1] == 0: # cell East
+                    if j<width-1 and maze[i][j+1] == 0 and maze_input[i][j+1] == 0: # cell East
                         maze[i][j+1] = step + 1;
 
 
-                    self.recogniser.frame[i, j] = (255, 0, 0) # setting the checked pixels to blue
-                    cv2.imshow("frame", self.recogniser.frame) # showing the frame
-                    cv2.waitKey(1) # required wait statement
+                    self.recogniser.frame[i, j] = (255, 0, 0) # setting the checked pixels to blue (mostly debug for now)
+
+                    if j%5 == 0: # show every 5 frames
+                        cv2.imshow("frame", self.recogniser.frame) # showing the frame
+                        cv2.waitKey(1) # required wait statement
 
 
 
