@@ -7,7 +7,7 @@ from PIL import Image
 from random import randint
 
 class MazeSolver:
-    def __init__(self, maze, recogniser, show_debug, show_loading, thickness, line_colour, entity, delay):
+    def __init__(self, maze, recogniser, show_debug, show_loading, thickness, line_colour, entity, entity_colour, delay):
 
         self.start_time = time.time() # timing
         self.PREDICTED_PERCENTAGE_OF_MAZE_STEPPED = 0.6 # what percentage of the maze will be 'stepped through' (turn blue in debug mode) before end is found, used for loading bar
@@ -18,6 +18,7 @@ class MazeSolver:
         self.line_colour = line_colour
         self.thickness = thickness
         self.entity = entity
+        self.entity_colour = entity_colour
         self.delay = delay
 
 
@@ -59,15 +60,11 @@ class MazeSolver:
 
     def _draw(self, frame, path):
 
-        delay = 2
-
         for i in range(len(path)):
 
-
-            # three blocks around
-            # TODO will index error
-            if self.entity: frame_temp = deepcopy(frame)
+            # TODO may index error
             
+            # snake head
             for offset_y in range((1-self.thickness//2) -1, (self.thickness//2)+1):
                 for offset_x in range((1-self.thickness//2)-1, (self.thickness//2)+1):
                     # if the cell is a wall in the binary frame 
@@ -76,19 +73,34 @@ class MazeSolver:
                         sum+=j
                     
                     if sum != 0: # if its not a wall in the binary frame
-                        if not self.entity:
-                            frame[path[i][0]+offset_y, path[i][1]+offset_x] = self.line_colour # setting the path pixels to blue
-                        else:
-                            frame_temp[path[i][0]+offset_y, path[i][1]+offset_x] = self.line_colour
-            
+
+                        if self.entity: # if want the snake head
+                            frame[path[i][0]+offset_y, path[i][1]+offset_x] = self.entity_colour # setting the path pixels to green   
+                        else:  
+                            frame[path[i][0]+offset_y, path[i][1]+offset_x] = self.line_colour # setting the path pixels to green   
+                            
                 
 
-            if i%delay == 0:
-                if not self.entity:
-                    cv2.imshow("frame", frame) # showing the frame
-                else:
-                    cv2.imshow("frame", frame_temp)
-                cv2.waitKey(self.delay) # required wait statement 
+            # showing the frame
+            cv2.imshow("frame", frame)
+
+
+            # snake body
+            if self.entity:
+                for offset_y in range((1-self.thickness//2) -1, (self.thickness//2)+1):
+                    for offset_x in range((1-self.thickness//2)-1, (self.thickness//2)+1):
+                        # if the cell is a wall in the binary frame 
+                        sum = 0
+                        for j in self.recogniser.frame[path[i][0]+offset_y, path[i][1]+offset_x]:
+                            sum+=j
+                        
+                        if sum != 0: # if its not a wall in the binary frame
+
+                            frame[path[i][0]+offset_y, path[i][1]+offset_x] = self.line_colour # setting the path pixels to blue            
+                    
+
+            cv2.waitKey(self.delay) # required wait statement with predetermined delay
+
 
         input()
 
