@@ -4,11 +4,18 @@ import cv2
 import time
 import numpy
 from PIL import Image
+from random import randint
 
 class MazeSolver:
-    def __init__(self, maze, recogniser, show_debug):
+    def __init__(self, maze, recogniser, show_debug, show_loading):
+
+        self.start_time = time.time() # timing
+
+        self.PREDICTED_PERCENTAGE_OF_MAZE_STEPPED = 0.6 # what percentage of the maze will be 'stepped through' (turn blue in debug mode) before end is found, used for loading bar
+
         self.recogniser = recogniser
         self.debug = show_debug
+        self.loading = show_loading
 
         n_maze = deepcopy(maze);
         
@@ -52,12 +59,11 @@ class MazeSolver:
 
         for i in range(len(path)):
 
-            frame[path[i][0], path[i][1]] = (255, 0, 0)
-            '''
+
             # three blocks around
             # TODO will index error
             for x in range(-1, 2):
-                for y in range(-3, 4):
+                for y in range(-1, 2):
 
                     # if the cell is a wall in the binary frame 
                     sum = 0
@@ -66,7 +72,6 @@ class MazeSolver:
                     
                     if sum != 0: # if its not a wall in the binary frame
                         frame[path[i][0]+y, path[i][1]+x] = (255, 0, 0) # setting the path pixels to blue
-            '''
            
             if i%delay == 0:
                 cv2.imshow("frame", frame) # showing the frame
@@ -117,23 +122,26 @@ class MazeSolver:
             if step % 2000 == 0:
                 print(step)
 
-            if step % 25 == 0:
-               
-                prog =  self.stepped_pixels / (width * height)
+            # loading bar
+            if step % 25 == 0 and self.loading:
+
+                prog = self.stepped_pixels / ((abs(ey - sy) * abs(ex - sx)) * self.PREDICTED_PERCENTAGE_OF_MAZE_STEPPED) 
                 if prog >= 1: prog = 1
 
-                l_bar_width = width * prog
-                for i in range(int(prev_prog*width), int(l_bar_width)):
-                    self.recogniser.frame[height-1, i] = (0, 0, 255)
-                    self.recogniser.frame[height-2, i] = (0, 0, 255)
-                    self.recogniser.frame[height-3, i] = (0, 0, 255)
+                for i in range(int(prev_prog*width), int(width * prog)):
+                    for j in range(1, 4):
+                        self.recogniser.frame[height-j, i] = (0,0,255)
+                
+                prev_prog = prog
+
 
 
             if step >= (height*width /2): # if have gone past the realm of possibility
                 print("Maze not possible.")
                 exit()
 
-            
+        
+        print("Maze population took %s seconds." % (time.time() - self.start_time))
 
         return maze;
 
@@ -162,15 +170,15 @@ class MazeSolver:
                     if j<width-1 and maze[i][j+1] == 0 and maze_input[i][j+1] == 0: # cell East
                         maze[i][j+1] = step + 1;
 
+                    self.stepped_pixels +=1
 
                     # TODO SHOW WHILE POPULATING
                     if self.debug:
                         self.recogniser.frame[i, j] = (255, 0, 0) # setting the checked pixels to blue (mostly debug for now)
-                        self.stepped_pixels +=1
 
-                        if j%10 == 0: # show every 10 frames 
-                            cv2.imshow("frame", self.recogniser.frame) # showing the frame
-                            cv2.waitKey(1) # required wait statement 
+                    if j%10 == 0: # show every 10 frames 
+                        cv2.imshow("frame", self.recogniser.frame) # showing the frame
+                        cv2.waitKey(1) # required wait statement 
 
 
 
