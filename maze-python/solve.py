@@ -6,8 +6,9 @@ import numpy
 from PIL import Image
 
 class MazeSolver:
-    def __init__(self, maze, recogniser):
+    def __init__(self, maze, recogniser, show_debug):
         self.recogniser = recogniser
+        self.debug = show_debug
 
         n_maze = deepcopy(maze);
         
@@ -100,12 +101,14 @@ class MazeSolver:
         height = len(maze)
         width = len(maze[0])
 
-        # TODO stuck in this while loop
+        # TODO SOMETIMES GET STUCK IN THIS WHILE LOOP WHILE END IS BELOW START
+        
         while maze[ey][ex] == 0: # while end not pathfound to (while still is an empty cell)
 
             self._move(maze, maze_in, step, height, width)
             step += 1; # increment distance
         
+            # TODO debug print
             if step % 2000 == 0:
                 print(step)
 
@@ -142,7 +145,7 @@ class MazeSolver:
 
 
                     # TODO SHOW WHILE POPULATING
-                    if False:
+                    if self.debug:
                         self.recogniser.frame[i, j] = (255, 0, 0) # setting the checked pixels to blue (mostly debug for now)
 
                         if j%10 == 0: # show every 10 frames 

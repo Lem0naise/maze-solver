@@ -1,5 +1,4 @@
 from solve import MazeSolver;
-from output import Outputter;
 from recognize import Recogniser;
 from time import sleep;
 import json
@@ -114,12 +113,11 @@ maze = frame;
 height = len(maze)
 width = len(maze[0])
 
-solver = MazeSolver(maze, recogniser);
+show_debug = True
+solver = MazeSolver(maze, recogniser, show_debug);
 
 # recogniser.draw(solver.path
 
-#outputter = Outputter(maze, solver.path);
-#outputter.solve();
 
 
 
