@@ -1,6 +1,6 @@
 import cv2
 import time
-CAMERA = 1
+CAMERA = 0
 
 HEIGHT = 200
 WIDTH = 200
