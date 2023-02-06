@@ -18,22 +18,26 @@ class Recogniser:
         if event == cv2.EVENT_LBUTTONDOWN and self.waiting: # if waiting for start and end
 
             if self.start == []: # if start is not yet defined, set start
+                
+                if self.frame[y][x] == 255:
+                    self.start = [y, x]                
 
-                self.start = [y, x]                
+                    print("Start colour:", end="")
+                    print(self.frame[self.start[0]][self.start[1]])
 
-                print("Start colour:", end="")
-                print(self.frame[self.start[0]][self.start[1]])
-
-                self.frame[self.start[0]][self.start[1]] = 2 # set start
+                    self.frame[self.start[0]][self.start[1]] = 2 # set start
 
             elif self.end == []: # set end if start done and end not done
 
-                self.end = [y, x]
+                if self.frame[y][x] == 255:
+                    self.end = [y, x]
 
-                print("End colour:", end="")
-                print(self.frame[self.end[0]][self.end[1]])
-                
-                self.frame[self.end[0]][self.end[1]] = 3 # set end
+                    print("End colour:", end="")
+                    print(self.frame[self.end[0]][self.end[1]])
+                    
+                    self.frame[self.end[0]][self.end[1]] = 3 # set end
+
+                    print("Press space to start.")
 
 
 
