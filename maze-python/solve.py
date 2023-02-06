@@ -76,6 +76,8 @@ class MazeSolver:
 
 
     def _populate_maze(self, maze_in, start, end):
+
+        self.stepped_pixels = 0
             
         # turn frame from black and white into rgb
         self.recogniser.frame = cv2.cvtColor(self.recogniser.frame, cv2.COLOR_GRAY2RGB)
@@ -103,8 +105,6 @@ class MazeSolver:
         height = len(maze)
         width = len(maze[0])
 
-        distance = (abs(sy - ey)**2 + abs(sx - ex)**2)**0.5
-
         # TODO SOMETIMES GET STUCK IN THIS WHILE LOOP WHILE END IS BELOW START
         
         prev_prog = 0
@@ -117,12 +117,16 @@ class MazeSolver:
             if step % 2000 == 0:
                 print(step)
 
-            prog = step / distance
-            if prog >= 1: prog = 1
+            if step % 25 == 0:
+               
+                prog =  self.stepped_pixels / (width * height)
+                if prog >= 1: prog = 1
 
-            l_bar_width = width * prog
-            for i in range(int(prev_prog*width), int(l_bar_width)):
-                self.recogniser.frame[height-10, i] = (0, 0, 255)
+                l_bar_width = width * prog
+                for i in range(int(prev_prog*width), int(l_bar_width)):
+                    self.recogniser.frame[height-1, i] = (0, 0, 255)
+                    self.recogniser.frame[height-2, i] = (0, 0, 255)
+                    self.recogniser.frame[height-3, i] = (0, 0, 255)
 
 
             if step >= (height*width /2): # if have gone past the realm of possibility
@@ -162,6 +166,7 @@ class MazeSolver:
                     # TODO SHOW WHILE POPULATING
                     if self.debug:
                         self.recogniser.frame[i, j] = (255, 0, 0) # setting the checked pixels to blue (mostly debug for now)
+                        self.stepped_pixels +=1
 
                         if j%10 == 0: # show every 10 frames 
                             cv2.imshow("frame", self.recogniser.frame) # showing the frame
