@@ -162,10 +162,22 @@ class MazeSolver:
                     # then: set cell to NEXT STEP
                     if i>0 and maze[i-1][j] == 0 and maze_input[i-1][j] == 0: # cell North
                         maze[i-1][j] = step + 1;
+                    
+                        if j>width-1 and maze[i-1][j+1] == 0 and maze_input[i-1][j+1] == 0: # cell North East
+                            maze[i-1][j] = step + 1;
+                        
+                        if j>0 and maze[i-1][j-1] == 0 and maze_input[i-1][j-1] == 0: # cell North West
+                            maze[i-1][j] = step + 1;
 
                     if i<height-1 and maze[i+1][j] == 0 and maze_input[i+1][j] == 0: # cell South
                         maze[i+1][j] = step + 1;
 
+                        if j<width-1 and maze[i+1][j+1] == 0 and maze_input[i+1][j+1] == 0: # cell South East
+                            maze[i+1][j] = step + 1;
+
+                        if j>0 and maze[i+1][j-1] == 0 and maze_input[i+1][j-1] == 0: # cell South West
+                            maze[i+1][j] = step + 1;
+                    
                     if j>0 and maze[i][j-1] == 0 and maze_input[i][j-1] == 0: # cell West
                         maze[i][j-1] = step + 1;
                     
