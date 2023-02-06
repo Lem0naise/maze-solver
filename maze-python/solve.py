@@ -62,17 +62,19 @@ class MazeSolver:
 
             # three blocks around
             # TODO will index error
-            for x in range(-1, 2):
-                for y in range(-1, 2):
+            
+            distance = 12
+    
+            # if the cell is a wall in the binary frame 
+            sum = 0
+            for j in self.recogniser.frame[path[i][0], path[i][1]]:
+                sum+=j
+            
+            if sum != 0: # if its not a wall in the binary frame
+                frame[path[i][0], path[i][1]] = (255, 0, 0) # setting the path pixels to blue
+    
+            
 
-                    # if the cell is a wall in the binary frame 
-                    sum = 0
-                    for j in self.recogniser.frame[path[i][0]+y, path[i][1]+x]:
-                        sum+=j
-                    
-                    if sum != 0: # if its not a wall in the binary frame
-                        frame[path[i][0]+y, path[i][1]+x] = (255, 0, 0) # setting the path pixels to blue
-           
             if i%delay == 0:
                 cv2.imshow("frame", frame) # showing the frame
                 cv2.waitKey(1) # required wait statement 
@@ -176,7 +178,7 @@ class MazeSolver:
                     if self.debug:
                         self.recogniser.frame[i, j] = (255, 0, 0) # setting the checked pixels to blue (mostly debug for now)
 
-                    if j%10 == 0: # show every 10 frames 
+                    if (self.debug or self.loading) and j%10 == 0: # show every 10 frames 
                         cv2.imshow("frame", self.recogniser.frame) # showing the frame
                         cv2.waitKey(1) # required wait statement 
 

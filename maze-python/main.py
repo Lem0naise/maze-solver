@@ -4,7 +4,7 @@ from time import sleep;
 import json
 import webbrowser
 
-# Runtime Parameters
+# Runtime Parameters (N.B. Makes significantly slower)
 show_debug = False
 show_loading = False
 
