@@ -4,12 +4,12 @@ from time import sleep;
 import json
 import webbrowser
 
-# Runtime Parameters (N.B. Makes significantly slower)
-show_debug = False
-show_loading = False
-line_thickness = 4
+# Runtime Parameters 
+show_debug = False #(N.B. Makes significantly slower)
+show_loading = False #(N.B. Makes significantly slower)
+line_thickness = 5
 
-
+# TODO CANNOT GO BELOW 
 recogniser = Recogniser();
 print('finished with recogniser')
 frame = recogniser.frame;

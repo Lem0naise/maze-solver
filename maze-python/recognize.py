@@ -2,8 +2,8 @@ import cv2
 import time
 CAMERA = 0
 
-HEIGHT = 200
-WIDTH = 200
+HEIGHT = 300
+WIDTH = 300
 # NB
 # opencv2 uses BGR colours, not RGB
 # coordinates are in (y, x) format not (x, y)
