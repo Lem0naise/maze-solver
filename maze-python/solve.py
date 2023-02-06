@@ -90,7 +90,7 @@ class MazeSolver:
                     cv2.imshow("frame", frame_temp)
                 cv2.waitKey(self.delay) # required wait statement 
 
-        cv2.waitKey(0)
+        input()
 
 
     def _populate_maze(self, maze_in, start, end):
