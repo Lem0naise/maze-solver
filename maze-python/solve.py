@@ -57,11 +57,12 @@ class MazeSolver:
             for x in range(-3, 4):
                 for y in range(-3, 4):
 
+                    # if the cell is a wall in the binary frame 
                     sum = 0
-                    for j in frame[path[i][0]+y, path[i][1]+x]:
+                    for j in self.recogniser.frame[path[i][0]+y, path[i][1]+x]:
                         sum+=j
                     
-                    if sum != 0:
+                    if sum != 0: # if its not a wall in the binary frame
                         frame[path[i][0]+y, path[i][1]+x] = (255, 0, 0) # setting the path pixels to blue
            
             if i%delay == 0:
@@ -140,12 +141,13 @@ class MazeSolver:
                         maze[i][j+1] = step + 1;
 
 
-                    # TODO this is showing while populating, you want to show only when pathfinding
-                    #self.recogniser.frame[i, j] = (255, 0, 0) # setting the checked pixels to blue (mostly debug for now)
+                    # TODO SHOW WHILE POPULATING
+                    if False:
+                        self.recogniser.frame[i, j] = (255, 0, 0) # setting the checked pixels to blue (mostly debug for now)
 
-                    if j%10 == 0 and False: # show every 10 frames 
-                        cv2.imshow("frame", self.recogniser.frame) # showing the frame
-                        cv2.waitKey(1) # required wait statement 
+                        if j%10 == 0: # show every 10 frames 
+                            cv2.imshow("frame", self.recogniser.frame) # showing the frame
+                            cv2.waitKey(1) # required wait statement 
 
 
 
