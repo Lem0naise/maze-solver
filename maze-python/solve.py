@@ -197,8 +197,24 @@ class MazeSolver:
             if sy>0 and pop_maze[sy-1][sx] == step-1: # cell North
                 sy -= 1;
 
+            elif sy>0 and sx<len(pop_maze)-1 and pop_maze[sy-1][sx+1] == step-1: # cell North East
+                sx += 1
+                sy -= 1
+
+            elif sy>0 and sx>0 and pop_maze[sy-1][sx-1] == step-1: # cell North West
+                sy -= 1
+                sx -= 1
+
             elif sy<len(pop_maze)-1 and pop_maze[sy+1][sx] == step-1: # cell South
                 sy += 1;
+
+            elif sy<len(pop_maze)-1 and sx<len(pop_maze)-1 and pop_maze[sy+1][sx+1] == step-1: # cell South East
+                sy += 1;
+                sx += 1
+            
+            elif sy<len(pop_maze)-1 and sx>0 and pop_maze[sy+1][sx-1] == step-1: # cell South West
+                sy += 1;
+                sx -= 1
 
             elif sx>0 and pop_maze[sy][sx-1] == step-1: # cell West
                 sx -= 1;
