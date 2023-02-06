@@ -3,7 +3,10 @@ from recognize import Recogniser;
 from time import sleep;
 import json
 import webbrowser
-show_debug = True
+
+# Runtime Parameters
+show_debug = False
+show_loading = False
 
 
 recogniser = Recogniser();
@@ -16,7 +19,7 @@ maze = frame;
 height = len(maze)
 width = len(maze[0])
 
-solver = MazeSolver(maze, recogniser, show_debug);
+solver = MazeSolver(maze, recogniser, show_debug, show_loading);
 
 
 # sending maze & path to server
