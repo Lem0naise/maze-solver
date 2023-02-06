@@ -12,15 +12,6 @@ WIDTH = 200
 
 class Recogniser:
 
-    def draw(self, path):
-        return
-        print("drawing")
-        for coord in path:
-            cv2.drawMarker(self.frame, coord, color=(0, 0, 255), markerType=cv2.MARKER_CROSS, thickness=3, markerSize=50)
-        
-        while True:
-            #print('showing fr fr')
-            cv2.imshow("frame", self.frame)
 
     def start_end(self, event,x,y,flags,param):
         
@@ -71,6 +62,7 @@ class Recogniser:
             # read current self.frame
             ret, self.frame = cap.read()
             self.frame = cv2.resize(self.frame, (HEIGHT, WIDTH))
+            self.colour_frame = self.frame
 
             # white thresholds
             white = (255, 255, 255);
@@ -94,7 +86,7 @@ class Recogniser:
             """
 
             # displays self.frame
-            cv2.imshow("frame", self.frame)
+            cv2.imshow("frame", self.colour_frame)
             
 
             # click q to select start and end

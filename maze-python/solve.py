@@ -42,7 +42,7 @@ class MazeSolver:
 
         self.path.reverse();
     
-        self._draw(self.recogniser.frame, self.path) # draw on the image
+        self._draw(self.recogniser.colour_frame, self.path) # draw on the image
 
 
     def _draw(self, frame, path):
@@ -104,6 +104,13 @@ class MazeSolver:
 
             self._move(maze, maze_in, step, height, width)
             step += 1; # increment distance
+        
+            if step % 2000 == 0:
+                print(step)
+
+            if step >= (height*width /2): # if have gone past the realm of possibility
+                print("Maze not possible.")
+                exit()
 
         return maze;
 
