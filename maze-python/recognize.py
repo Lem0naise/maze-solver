@@ -53,39 +53,27 @@ class Recogniser:
 
         cap.set(3, 16) # setting width 
         cap.set(4, 9) # and height
-
-        # read first frame to get dimensions
-        ret, self.frame = cap.read()
-        first_frame = self.frame
     
         while(True):
             # read current self.frame
             ret, self.frame = cap.read()
             self.frame = cv2.resize(self.frame, (HEIGHT, WIDTH))
-            self.colour_frame = self.frame
+            self.colour_frame = self.frame # save the coloured frame before doing anything else to it
 
             # white thresholds
             white = (255, 255, 255);
-            dark_white = (160, 160, 160);
+            dark_white = (100, 100, 100);
 
-            # creating a 1 to 0 mask with any colours that resemble green
+            # creating a 1 to 0 mask with any colours that resemble white
             mask = cv2.inRange(self.frame, dark_white, white);
             self.frame = cv2.bitwise_and(self.frame, self.frame, mask=mask); # only enable green pixels
             self.frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY); # image to greyscale
-
-
             # thresholding greyscale into b&w
             lower_thres = 160 # 70/255 minimum whiteity
             (thresh, self.frame) = cv2.threshold(self.frame, lower_thres, 255, cv2.THRESH_BINARY);
 
-            # iterate through every pixel 
-            """
-            for y in range(0, height):
-                for x in range(0, width):
-                    pass
-            """
 
-            # displays self.frame
+            # displays original coloured frame
             cv2.imshow("frame", self.colour_frame)
             
 
@@ -97,19 +85,8 @@ class Recogniser:
                 break
 
 
-      
-        cap.release()
-        #cv2.destroyAllWindows()
-        #cv2.namedWindow("bob")
-        
-       
-
         # After the loop release the cap(ture) object
-        
-
-        # Destroy all the windows
-        #cv2.destroyAllWindows()
-
+        cap.release() 
         return
 
 
