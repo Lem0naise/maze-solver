@@ -7,10 +7,10 @@ from PIL import Image
 from random import randint
 
 class MazeSolver:
-    def __init__(self, maze, recogniser, show_debug, show_loading):
+    def __init__(self, maze, recogniser, show_debug, show_loading, thickness):
 
         self.start_time = time.time() # timing
-
+        self.thickness = thickness
         self.PREDICTED_PERCENTAGE_OF_MAZE_STEPPED = 0.6 # what percentage of the maze will be 'stepped through' (turn blue in debug mode) before end is found, used for loading bar
 
         self.recogniser = recogniser
@@ -63,10 +63,9 @@ class MazeSolver:
             # three blocks around
             # TODO will index error
             
-            distance = 12
 
-            for offset_y in range(-1, 2):
-                for offset_x in range(-1, 2):
+            for offset_y in range((1-self.thickness//2) -1, (self.thickness//2)+1):
+                for offset_x in range((1-self.thickness//2)-1, (self.thickness//2)+1):
                     # if the cell is a wall in the binary frame 
                     sum = 0
                     for j in self.recogniser.frame[path[i][0]+offset_y, path[i][1]+offset_x]:

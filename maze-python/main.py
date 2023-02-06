@@ -7,6 +7,7 @@ import webbrowser
 # Runtime Parameters (N.B. Makes significantly slower)
 show_debug = False
 show_loading = False
+line_thickness = 4
 
 
 recogniser = Recogniser();
@@ -19,7 +20,7 @@ maze = frame;
 height = len(maze)
 width = len(maze[0])
 
-solver = MazeSolver(maze, recogniser, show_debug, show_loading);
+solver = MazeSolver(maze, recogniser, show_debug, show_loading, line_thickness);
 
 
 # sending maze & path to server
