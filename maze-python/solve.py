@@ -64,16 +64,18 @@ class MazeSolver:
             # TODO will index error
             
             distance = 12
-    
-            # if the cell is a wall in the binary frame 
-            sum = 0
-            for j in self.recogniser.frame[path[i][0], path[i][1]]:
-                sum+=j
+
+            for offset_y in range(-1, 2):
+                for offset_x in range(-1, 2):
+                    # if the cell is a wall in the binary frame 
+                    sum = 0
+                    for j in self.recogniser.frame[path[i][0]+offset_y, path[i][1]+offset_x]:
+                        sum+=j
+                    
+                    if sum != 0: # if its not a wall in the binary frame
+                        frame[path[i][0]+offset_y, path[i][1]+offset_x] = (255, 0, 0) # setting the path pixels to blue
             
-            if sum != 0: # if its not a wall in the binary frame
-                frame[path[i][0], path[i][1]] = (255, 0, 0) # setting the path pixels to blue
-    
-            
+                
 
             if i%delay == 0:
                 cv2.imshow("frame", frame) # showing the frame
