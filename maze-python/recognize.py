@@ -1,5 +1,6 @@
 import cv2
 import time
+CAMERA = 1
 
 HEIGHT = 200
 WIDTH = 200
@@ -51,7 +52,7 @@ class Recogniser:
         self.start = []
         self.end = []
 
-        cap = cv2.VideoCapture(0)
+        cap = cv2.VideoCapture(CAMERA)
 
         cv2.namedWindow("frame")
 
