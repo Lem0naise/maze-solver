@@ -52,10 +52,11 @@ class MazeSolver:
 
         for i in range(len(path)):
 
-
+            frame[path[i][0], path[i][1]] = (255, 0, 0)
+            '''
             # three blocks around
             # TODO will index error
-            for x in range(-3, 4):
+            for x in range(-1, 2):
                 for y in range(-3, 4):
 
                     # if the cell is a wall in the binary frame 
@@ -65,6 +66,7 @@ class MazeSolver:
                     
                     if sum != 0: # if its not a wall in the binary frame
                         frame[path[i][0]+y, path[i][1]+x] = (255, 0, 0) # setting the path pixels to blue
+            '''
            
             if i%delay == 0:
                 cv2.imshow("frame", frame) # showing the frame
@@ -101,8 +103,11 @@ class MazeSolver:
         height = len(maze)
         width = len(maze[0])
 
+        distance = (abs(sy - ey)**2 + abs(sx - ex)**2)**0.5
+
         # TODO SOMETIMES GET STUCK IN THIS WHILE LOOP WHILE END IS BELOW START
         
+        prev_prog = 0
         while maze[ey][ex] == 0: # while end not pathfound to (while still is an empty cell)
 
             self._move(maze, maze_in, step, height, width)
@@ -112,9 +117,19 @@ class MazeSolver:
             if step % 2000 == 0:
                 print(step)
 
+            prog = step / distance
+            if prog >= 1: prog = 1
+
+            l_bar_width = width * prog
+            for i in range(int(prev_prog*width), int(l_bar_width)):
+                self.recogniser.frame[height-10, i] = (0, 0, 255)
+
+
             if step >= (height*width /2): # if have gone past the realm of possibility
                 print("Maze not possible.")
                 exit()
+
+            
 
         return maze;
 
