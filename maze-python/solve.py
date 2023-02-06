@@ -81,7 +81,8 @@ class MazeSolver:
                     if sum != 0: # if its not a wall in the binary frame
 
                         if self.entity: # if want the snake head
-                            saved_colours.append(copy(frame[path[i][0]+offset_y, path[i][1]+offset_x])) # saving the colour
+                            if not(self.line): # if you don't want the line also, then save the colour
+                                saved_colours.append(copy(frame[path[i][0]+offset_y, path[i][1]+offset_x])) # saving the colour
                             frame[path[i][0]+offset_y, path[i][1]+offset_x] = self.entity_colour # setting the path pixels to entity colour  
 
                         elif self.line: # if just want the snake body
