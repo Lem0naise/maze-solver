@@ -1,5 +1,5 @@
 # zac
-from copy import deepcopy
+from copy import deepcopy, copy
 import cv2
 import time
 import numpy
@@ -7,7 +7,7 @@ from PIL import Image
 from random import randint
 
 class MazeSolver:
-    def __init__(self, maze, recogniser, show_debug, show_loading, thickness, line_colour, entity, entity_colour, delay):
+    def __init__(self, maze, recogniser, show_debug, show_loading, thickness, line, line_colour, entity, entity_colour, delay):
 
         self.start_time = time.time() # timing
         self.PREDICTED_PERCENTAGE_OF_MAZE_STEPPED = 0.6 # what percentage of the maze will be 'stepped through' (turn blue in debug mode) before end is found, used for loading bar
@@ -15,6 +15,7 @@ class MazeSolver:
         self.recogniser = recogniser
         self.debug = show_debug
         self.loading = show_loading
+        self.line = line
         self.line_colour = line_colour
         self.thickness = thickness
         self.entity = entity
@@ -60,14 +61,19 @@ class MazeSolver:
 
     def _draw(self, frame, path):
 
+        if not(self.entity or self.line): return; # guard clause if not wanting the entity or the line
+    
         for i in range(len(path)):
 
             # TODO may index error
             
+            saved_colours = [] # save the colours so you can switch them back after if no line
+
             # snake head
             for offset_y in range((1-self.thickness//2) -1, (self.thickness//2)+1):
                 for offset_x in range((1-self.thickness//2)-1, (self.thickness//2)+1):
                     # if the cell is a wall in the binary frame 
+
                     sum = 0
                     for j in self.recogniser.frame[path[i][0]+offset_y, path[i][1]+offset_x]:
                         sum+=j
@@ -75,9 +81,11 @@ class MazeSolver:
                     if sum != 0: # if its not a wall in the binary frame
 
                         if self.entity: # if want the snake head
-                            frame[path[i][0]+offset_y, path[i][1]+offset_x] = self.entity_colour # setting the path pixels to green   
-                        else:  
-                            frame[path[i][0]+offset_y, path[i][1]+offset_x] = self.line_colour # setting the path pixels to green   
+                            saved_colours.append(copy(frame[path[i][0]+offset_y, path[i][1]+offset_x])) # saving the colour
+                            frame[path[i][0]+offset_y, path[i][1]+offset_x] = self.entity_colour # setting the path pixels to entity colour  
+
+                        elif self.line: # if just want the snake body
+                            frame[path[i][0]+offset_y, path[i][1]+offset_x] = self.line_colour # setting the path pixels to entity colour    
                             
                 
 
@@ -86,6 +94,7 @@ class MazeSolver:
 
 
             # snake body
+            iter = 0
             if self.entity:
                 for offset_y in range((1-self.thickness//2) -1, (self.thickness//2)+1):
                     for offset_x in range((1-self.thickness//2)-1, (self.thickness//2)+1):
@@ -96,7 +105,12 @@ class MazeSolver:
                         
                         if sum != 0: # if its not a wall in the binary frame
 
-                            frame[path[i][0]+offset_y, path[i][1]+offset_x] = self.line_colour # setting the path pixels to blue            
+                            if self.line: # if setting to line
+                                frame[path[i][0]+offset_y, path[i][1]+offset_x] = self.line_colour # setting the path pixels to blue 
+                            else: # if setting to before colours
+                                frame[path[i][0]+offset_y, path[i][1]+offset_x] = saved_colours[iter]
+
+                            iter += 1          
                     
 
             cv2.waitKey(self.delay) # required wait statement with predetermined delay
