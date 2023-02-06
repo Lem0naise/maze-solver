@@ -7,15 +7,19 @@ from PIL import Image
 from random import randint
 
 class MazeSolver:
-    def __init__(self, maze, recogniser, show_debug, show_loading, thickness):
+    def __init__(self, maze, recogniser, show_debug, show_loading, thickness, line_colour, entity, delay):
 
         self.start_time = time.time() # timing
-        self.thickness = thickness
         self.PREDICTED_PERCENTAGE_OF_MAZE_STEPPED = 0.6 # what percentage of the maze will be 'stepped through' (turn blue in debug mode) before end is found, used for loading bar
 
         self.recogniser = recogniser
         self.debug = show_debug
         self.loading = show_loading
+        self.line_colour = line_colour
+        self.thickness = thickness
+        self.entity = entity
+        self.delay = delay
+
 
         n_maze = deepcopy(maze);
         
@@ -62,8 +66,8 @@ class MazeSolver:
 
             # three blocks around
             # TODO will index error
+            if self.entity: frame_temp = deepcopy(frame)
             
-
             for offset_y in range((1-self.thickness//2) -1, (self.thickness//2)+1):
                 for offset_x in range((1-self.thickness//2)-1, (self.thickness//2)+1):
                     # if the cell is a wall in the binary frame 
@@ -72,13 +76,19 @@ class MazeSolver:
                         sum+=j
                     
                     if sum != 0: # if its not a wall in the binary frame
-                        frame[path[i][0]+offset_y, path[i][1]+offset_x] = (255, 0, 0) # setting the path pixels to blue
+                        if not self.entity:
+                            frame[path[i][0]+offset_y, path[i][1]+offset_x] = self.line_colour # setting the path pixels to blue
+                        else:
+                            frame_temp[path[i][0]+offset_y, path[i][1]+offset_x] = self.line_colour
             
                 
 
             if i%delay == 0:
-                cv2.imshow("frame", frame) # showing the frame
-                cv2.waitKey(1) # required wait statement 
+                if not self.entity:
+                    cv2.imshow("frame", frame) # showing the frame
+                else:
+                    cv2.imshow("frame", frame_temp)
+                cv2.waitKey(self.delay) # required wait statement 
 
         cv2.waitKey(0)
 

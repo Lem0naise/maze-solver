@@ -4,10 +4,16 @@ from time import sleep;
 import json
 import webbrowser
 
-# Runtime Parameters 
-show_debug = False #(N.B. Makes significantly slower)
-show_loading = False #(N.B. Makes significantly slower)
-line_thickness = 5
+# Runtime Parameters (N.B. Makes significantly slower)
+show_debug = False
+show_loading = False
+
+# Solution Display Options (Does not affect speed as much)
+line_thickness = 4
+line_colour = (222, 98, 91)
+entity = True # idk what to call this
+delay = 50 # ms, time between path frames, when entity = False set to 1, when entity = True set to 50 or otherwise
+
 
 # TODO CANNOT GO BELOW 
 recogniser = Recogniser();
@@ -20,7 +26,7 @@ maze = frame;
 height = len(maze)
 width = len(maze[0])
 
-solver = MazeSolver(maze, recogniser, show_debug, show_loading, line_thickness);
+solver = MazeSolver(maze, recogniser, show_debug, show_loading, line_thickness, line_colour, entity, delay);
 
 
 # sending maze & path to server
