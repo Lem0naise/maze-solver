@@ -5,7 +5,7 @@ from recognize import Recogniser;
 show_debug = False
 show_loading = False
 
-# Solution Display Options (Negligibly affect speed)
+# Solution Display Options
 CAMERA = 1
 resolution = (200, 200) # width, height
 delay = 1 # ms, integer, >0
