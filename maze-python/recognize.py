@@ -1,9 +1,6 @@
 import cv2
-import time
 CAMERA = 0
 
-HEIGHT = 300
-WIDTH = 300
 # NB
 # opencv2 uses BGR colours, not RGB
 # coordinates are in (y, x) format not (x, y)
@@ -44,8 +41,9 @@ class Recogniser:
 
 
 
-    def __init__(self):
+    def __init__(self, resolution):
 
+        self.width, self.height = resolution
         self.waiting = False
 
 
@@ -64,7 +62,7 @@ class Recogniser:
         while(True):
             # read current self.frame
             ret, self.frame = cap.read()
-            self.frame = cv2.resize(self.frame, (HEIGHT, WIDTH))
+            self.frame = cv2.resize(self.frame, (self.height, self.width))
             self.colour_frame = self.frame # save the coloured frame before doing anything else to it
 
             # white thresholds
@@ -87,7 +85,6 @@ class Recogniser:
             # click q to select start and end
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 self.waiting = True
-                time.sleep(1)
                 cv2.waitKey(0); # wait for q to be pressed again
                 break
 
