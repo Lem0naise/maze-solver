@@ -163,7 +163,7 @@ class MazeSolver:
                 print(step)
 
             # loading bar
-            if step % 25 == 0 and self.loading:
+            if self.loading and step % 25 == 0:
 
                 prog = self.stepped_pixels / ((abs(ey - sy) * abs(ex - sx)) * self.PREDICTED_PERCENTAGE_OF_MAZE_STEPPED) 
                 if prog >= 1: prog = 1
