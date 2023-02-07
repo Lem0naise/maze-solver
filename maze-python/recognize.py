@@ -1,19 +1,20 @@
 import cv2
-CAMERA = 0
 
 # NB
 # opencv2 uses BGR colours, not RGB
 # coordinates are in (y, x) format not (x, y)
 
 # this is how you draw markers on the frame
-#cv2.drawMarker(frame, (width//2, height//2), color=(0, 0, 255), markerType=cv2.MARKER_CROSS, thickness=3, markerSize=50)
+# cv2.drawMarker(frame, (width//2, height//2), color=(0, 0, 255), markerType=cv2.MARKER_CROSS, thickness=3, markerSize=50)
+
+# this is how you set the rgb value of a pixel in the frame
+# frame[y, x] = (b,g,r)
 
 class Recogniser:
 
-
-    def start_end(self, event,x,y,flags,param):
+    def start_end(self, event,x,y,flags,param): # function to set start & end coords based on clicks on frame
         
-        if event == cv2.EVENT_LBUTTONDOWN and self.waiting: # if waiting for start and end
+        if event == cv2.EVENT_LBUTTONDOWN and self.waiting: # if button pressed & waiting for start and end
 
             if self.start == []: # if start is not yet defined, set start
                 
@@ -26,7 +27,7 @@ class Recogniser:
 
                     self.frame[self.start[0]][self.start[1]] = 2 # set start
 
-            elif self.end == []: # set end if start done and end not done
+            elif self.end == []: # set end if start defined and end not yet defined
 
                 if self.frame[y][x] == 255:
                     self.end = [y, x]
@@ -41,20 +42,19 @@ class Recogniser:
 
 
 
-    def __init__(self, resolution):
+    def __init__(self, resolution, CAMERA):
 
         self.width, self.height = resolution
         self.waiting = False
 
-
         self.start = []
         self.end = []
 
-        cap = cv2.VideoCapture(CAMERA)
+        cap = cv2.VideoCapture(CAMERA) # capture object
 
         cv2.namedWindow("frame")
 
-        cv2.setMouseCallback("frame", self.start_end)
+        cv2.setMouseCallback("frame", self.start_end) # click listener
 
         cap.set(3, 16) # setting width 
         cap.set(4, 9) # and height
@@ -73,21 +73,19 @@ class Recogniser:
             mask = cv2.inRange(self.frame, dark_white, white);
             self.frame = cv2.bitwise_and(self.frame, self.frame, mask=mask); # only enable green pixels
             self.frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY); # image to greyscale
+
             # thresholding greyscale into b&w
             lower_thres = 160 # 70/255 minimum whiteity
             (thresh, self.frame) = cv2.threshold(self.frame, lower_thres, 255, cv2.THRESH_BINARY);
 
-
             # displays original coloured frame
             cv2.imshow("frame", self.colour_frame)
             
-
             # click q to select start and end
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 self.waiting = True
-                cv2.waitKey(0); # wait for q to be pressed again
+                cv2.waitKey(0); # wait for any key to be pressed
                 break
-
 
         # After the loop release the cap(ture) object
         cap.release() 

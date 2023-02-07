@@ -1,18 +1,18 @@
-# zac
 from copy import deepcopy, copy
 import cv2
 import time
 import numpy
-from PIL import Image
-from random import randint
 
 class MazeSolver:
     def __init__(self, maze, recogniser, show_debug, show_loading, thickness, line, line_colour, entity, entity_colour, delay):
 
-        self.start_time = time.time() # timing
+        self.start_time = time.time() # getting current time (used for calculating pathfinding time)
+
         self.PREDICTED_PERCENTAGE_OF_MAZE_STEPPED = 0.6 # what percentage of the maze will be 'stepped through' (turn blue in debug mode) before end is found, used for loading bar
 
         self.recogniser = recogniser
+
+        # display option vars
         self.debug = show_debug
         self.loading = show_loading
         self.line = line
@@ -25,6 +25,7 @@ class MazeSolver:
 
         n_maze = deepcopy(maze);
         
+        # getting coords of start and end
         start, end = None, None;
         print("Finding start and end.")
         for i in range(len(n_maze)):
@@ -47,7 +48,7 @@ class MazeSolver:
         print("Found start and end.")
 
         print("Populating maze...")
-        pop_maze = self._populate_maze(n_maze, start, end); # TODO Stuck here
+        pop_maze = self._populate_maze(n_maze, start, end); # TODO doesn't populate below start
         print("Populated maze.")
 
         print("Pathing through maze...");
@@ -88,7 +89,6 @@ class MazeSolver:
                         elif self.line: # if just want the snake body
                             frame[path[i][0]+offset_y, path[i][1]+offset_x] = self.line_colour # setting the path pixels to entity colour    
                             
-                
 
             # showing the frame
             cv2.imshow("frame", frame)
@@ -116,8 +116,7 @@ class MazeSolver:
 
             cv2.waitKey(self.delay) # required wait statement with predetermined delay
 
-
-        input()
+        input() # wait for input before ending program
 
 
     def _populate_maze(self, maze_in, start, end):
@@ -150,10 +149,10 @@ class MazeSolver:
         height = len(maze)
         width = len(maze[0])
 
-        # TODO SOMETIMES GET STUCK IN THIS WHILE LOOP WHILE END IS BELOW START
+        # TODO SOMETIMES GET STUCK IN THIS WHILE LOOP WHILE END IS BELOW START (doesn't populate below start y coord)
         
         prev_prog = 0
-        while maze[ey][ex] == 0: # while end not pathfound to (while still is an empty cell)
+        while maze[ey][ex] == 0: # while end not pathfound to (while end is still an empty cell)
 
             self._move(maze, maze_in, step, height, width)
             step += 1; # increment distance
@@ -162,7 +161,7 @@ class MazeSolver:
             if step % 2000 == 0:
                 print(step)
 
-            # loading bar
+            # loading bar, tries to predict time taken for population
             if self.loading and step % 25 == 0:
 
                 prog = self.stepped_pixels / ((abs(ey - sy) * abs(ex - sx)) * self.PREDICTED_PERCENTAGE_OF_MAZE_STEPPED) 
@@ -173,7 +172,6 @@ class MazeSolver:
                         self.recogniser.frame[height-j, i] = (0,0,255)
                 
                 prev_prog = prog
-
 
 
             if step >= (height*width /2): # if have gone past the realm of possibility

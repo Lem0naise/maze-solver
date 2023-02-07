@@ -1,25 +1,25 @@
 from solve import MazeSolver;
 from recognize import Recogniser;
-from time import sleep;
 
 # Runtime Parameters (N.B. Makes significantly slower)
 show_debug = False
 show_loading = False
 
 # Solution Display Options (Negligibly affect speed)
+CAMERA = 1
 resolution = (200, 200) # width, height
-line_thickness = 2
-line_colour = (222, 98, 91)
-entity_colour = (50, 50, 50) # colour of snake head
-line = True # boolean, snake body or not
-entity = True # boolean, snake head or not
 delay = 1 # ms, integer, >0
 
+line = True # boolean, snake body or not
+line_colour = (222, 98, 91)
+line_thickness = 2
+
+entity = False # boolean, snake head or not
+entity_colour = (222, 98, 91) # colour of snake head
 
 
 
-
-recogniser = Recogniser(resolution);
+recogniser = Recogniser(resolution, CAMERA);
 
 # waiting for frame
 print('finished with recogniser')
