@@ -1,4 +1,4 @@
-from solve import MazeSolver;
+'''from solve import MazeSolver;
 from recognize import Recogniser;
 
 # Runtime Parameters (N.B. Makes significantly slower)
@@ -31,3 +31,4 @@ maze = frame;
 height = len(maze)
 width = len(maze[0])
 solver = MazeSolver(maze, recogniser, show_debug, show_loading, line_thickness, line, line_colour, entity, entity_colour, delay);
+'''
