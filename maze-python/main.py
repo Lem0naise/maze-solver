@@ -12,7 +12,7 @@ delay = 1 # ms, integer, >0
 
 line = True # boolean, snake body or not
 line_colour = (222, 98, 91)
-line_thickness = 2
+line_thickness = 3
 
 entity = True # boolean, snake head or not
 entity_colour = (50, 20, 20) # colour of snake head

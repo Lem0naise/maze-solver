@@ -13,21 +13,16 @@ def path_to_bfs(path, height, width):
         for j in range(width):
             maze[-1].append(1)
 
-    print("Emptied array.")
+
     # set the actual empty path to 0s 
     for each in path:
         each = _str_to_tuple(each)
         y, x = each
         maze[y][x] = 0
 
-    print(np.matrix(maze))
-
-    print("Populating maze...")
     pop_maze = populate_maze(maze, _str_to_tuple(path[0]), _str_to_tuple(path[-1]))
-    print("Populated maze.")
-    print("Pathing maze...")
     path = path_maze(pop_maze, _str_to_tuple(path[-1]))
-    print("Pathed maze.")
+
     return path
 
 def populate_maze(maze_in, start, end):
@@ -54,21 +49,15 @@ def populate_maze(maze_in, start, end):
 
     # TODO SOMETIMES GET STUCK IN THIS WHILE LOOP WHILE END IS BELOW START (doesn't populate below start y coord)
     
-    print("before while loop populating")
-    print(np.matrix(maze))
-    print()
+
     while maze[ey][ex] == 0: # while end not pathfound to (while end is still an empty cell)
 
         move(maze, maze_in, step, height, width)
         step += 1; # increment distance
     
         # TODO debug print
-        if step % 200 == 0:
-            print(step)
 
-    print("after while loop populating")
-    print(np.matrix(maze))
-    print()
+
     return maze;
 
 

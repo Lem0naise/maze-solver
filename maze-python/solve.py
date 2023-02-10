@@ -12,8 +12,9 @@ class MazeSolver:
 
         self.height = len(maze)
         self.width = len(maze[0])
-
+        self.line_colour = line_colour
         self.recogniser = recogniser
+        self.thickness = thickness
 
         # display option vars
         self.debug = show_debug
@@ -131,8 +132,19 @@ class MazeSolver:
 
         path = bfs.path_to_bfs(path, self.height, self.width) # run bfs on the path
         print("Fully pathed maze.")
-        for node in path:
-            self.recogniser.colour_frame[int(node[0])][int(node[1])] = (0, 0, 255)
+        for node in path: # for the path
+            
+            y, x = node
+
+            # line displaying (thickness etc)
+
+            for offset_y in range((1-self.thickness//2)-1, (self.thickness//2)+1):
+                for offset_x in range((1-self.thickness//2)-1, (self.thickness//2)+1):
+
+                    # if the cell is a wall in the binary frame 
+                    sum = self.recogniser.frame[y+offset_y, x+offset_x]
+                    if sum != 0: # if its not a wall in the binary frame
+                        self.recogniser.colour_frame[y+offset_y][x+offset_x] = self.line_colour # setting the pixel the line colour
 
             cv2.imshow("frame", self.recogniser.colour_frame)
             cv2.waitKey(1)
