@@ -32,7 +32,7 @@ class Recogniser:
                 if self.frame[y][x] == 255:
                     self.end = [y, x]
 
-                    print(f"Set end: ({y},{x}) {self.frame[self.start[0]][self.start[1]]}")
+                    print(f"Set end: ({y},{x}) {self.frame[self.end[0]][self.end[1]]}")
                     cv2.drawMarker(self.colour_frame, (x, y), color=(0, 0, 255), markerType=cv2.MARKER_CROSS, thickness=1, markerSize=3)
                     cv2.imshow("frame", self.colour_frame)
                     
