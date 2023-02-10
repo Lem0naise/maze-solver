@@ -13,12 +13,6 @@ class MazeSolver:
 
         # display option vars
         self.debug = show_debug
-        self.line = line
-        self.line_colour = line_colour
-        self.thickness = thickness
-        self.entity = entity
-        self.entity_colour = entity_colour
-        self.delay = delay
 
         n_maze = deepcopy(maze);
         
