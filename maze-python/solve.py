@@ -41,7 +41,11 @@ class MazeSolver:
         print("Traversing took % seconds." % (time.time() - self.start_time))
         
         #print(path)
-        self._draw(path)
+        if path != False:
+            self._draw(path)
+        else:
+            print('Maze not possible.')
+            input()
 
     def _list_to_graph(self, maze):
         graph = {}
@@ -101,8 +105,12 @@ class MazeSolver:
                         break
                 
             else: # go back to previous node
-                self.path_stack.pop(-1) 
-                node = self.path_stack[-1]
+                if len(self.path_stack) > 1:
+                    self.path_stack.pop(-1) 
+                    node = self.path_stack[-1]
+                else:
+                    self.path_stack = False
+                    break
 
                 if self.debug:
                     node_t = self._str_to_tuple(node)
