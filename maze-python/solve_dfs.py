@@ -53,6 +53,7 @@ class MazeSolver_dfs:
         
         maze_graph = self._list_to_graph(n_maze)
 
+        print("Starting DFS...")
         path = self._traverse(maze_graph)
         print(f"DFS complete. Took {(time.time() - self.start_time)} seconds.")
         
@@ -167,6 +168,7 @@ class MazeSolver_dfs:
             
 
         if self.show_bfs_cleanup:
+            print("Starting BFS...")
             self.start_time = time.time() 
             path = bfs.path_to_bfs(path, self.height, self.width) # run bfs on the path
             print(f"BFS complete. Took {(time.time() - self.start_time)} seconds.")
