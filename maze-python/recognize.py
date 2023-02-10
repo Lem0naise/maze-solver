@@ -75,7 +75,7 @@ class Recogniser:
             self.frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY); # image to greyscale
 
             # thresholding greyscale into b&w
-            lower_thres = 160 # 70/255 minimum whiteity
+            lower_thres = 150 # 70/255 minimum whiteity
             (thresh, self.frame) = cv2.threshold(self.frame, lower_thres, 255, cv2.THRESH_BINARY);
 
             # displays original coloured frame
