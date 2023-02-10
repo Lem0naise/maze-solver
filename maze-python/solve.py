@@ -2,12 +2,16 @@ from copy import deepcopy, copy
 import cv2
 import time
 import numpy
+import bfs
 
 
 class MazeSolver:
     def __init__(self, maze, recogniser, show_debug, show_loading, thickness, line, line_colour, entity, entity_colour, delay):
 
         self.start_time = time.time() # getting current time (used for calculating pathfinding time)
+
+        self.height = len(maze)
+        self.width = len(maze[0])
 
         self.recogniser = recogniser
 
@@ -124,6 +128,10 @@ class MazeSolver:
                 
         
     def _draw(self, path): # TODO make more beautiful
+
+        bfs.path_to_bfs(path, self.height, self.width) # run bfs on the path
+
+        '''
         for node in path:
             node = self._str_to_tuple(node)
             self.recogniser.colour_frame[int(node[0])][int(node[1])] = (0, 0, 255)
@@ -132,3 +140,4 @@ class MazeSolver:
             cv2.waitKey(1)
 
         input()
+        '''
