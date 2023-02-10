@@ -2,12 +2,6 @@ from solve_dfs import MazeSolver_dfs;
 from solve_bfs import MazeSolver_bfs;
 from recognize import Recogniser;
 
-# Runtime Parameters (N.B. Makes significantly slower)
-show_loading = False
-
-# Solution Display Options
-CAMERA = 0
-resolution = (200, 200) # width, height
 
 ''' 
 depth first search (dfs) v. breadth first search (bfs)
@@ -18,8 +12,12 @@ bfs - significantly slower, always gets the shortest possible path
 
 '''
 
-transversal_algo = 'dfs' # dfs / bfs
+# Display & Traversal Options
 
+CAMERA = 0
+resolution = (200, 200) # width, height
+
+transversal_algo = 'dfs' # dfs / bfs
 
 dfs_opts = {
     'show_dfs': True,
