@@ -26,6 +26,9 @@ class Recogniser:
                     cv2.imshow("frame", self.colour_frame)
 
                     self.frame[self.start[0]][self.start[1]] = 2 # set start
+                
+                else:
+                    print("Start selection failed. Please select a white pixel.")
 
             elif self.end == []: # set end if start defined and end not yet defined
 
@@ -40,7 +43,8 @@ class Recogniser:
 
                     print("Press any key to start maze traversal.")
 
-
+                else:
+                    print("End selection failed. Please select a white pixel.")
 
     def __init__(self, resolution, CAMERA):
 
