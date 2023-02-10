@@ -2,7 +2,7 @@ from solve import MazeSolver;
 from recognize import Recogniser;
 
 # Runtime Parameters (N.B. Makes significantly slower)
-show_debug = True
+show_debug = False
 show_loading = False
 
 # Solution Display Options
