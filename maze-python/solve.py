@@ -6,7 +6,7 @@ import bfs
 
 
 class MazeSolver:
-    def __init__(self, maze, recogniser, show_debug, dfs_opts, bfs_opts):
+    def __init__(self, maze, recogniser, dfs_opts, bfs_opts):
 
         self.start_time = time.time() # getting current time (used for calculating pathfinding time)
 
@@ -16,18 +16,19 @@ class MazeSolver:
         self.recogniser = recogniser
 
         # display option vars
-        self.debug = show_debug
 
         self.show_dfs = dfs_opts['show_dfs']
         self.show_dfs_delay = dfs_opts['show_dfs_delay']
         self.dfs_line_colour = dfs_opts['dfs_line_colour']
         self.dfs_thickness = dfs_opts['dfs_thickness']
         self.hide_dfs_on_bfs_show = dfs_opts['hide_dfs_on_bfs_show']
+        self.show_dfs_debug = dfs_opts['show_dfs_debug']
 
         self.show_bfs_cleanup = bfs_opts['show_bfs_cleanup']
         self.show_bfs_delay = bfs_opts['show_bfs_delay']
         self.bfs_line_colour = bfs_opts['bfs_line_colour']
         self.bfs_thickness = bfs_opts['bfs_thickness']
+        self.show_bfs_debug = bfs_opts['show_bfs_debug'] # TODO
 
         n_maze = deepcopy(maze);
         
@@ -107,7 +108,7 @@ class MazeSolver:
                 self.path_stack.append(node)
                 visited[node] = True
 
-                if self.debug:
+                if self.show_dfs_debug:
                     node_t = self._str_to_tuple(node)
                     self.recogniser.colour_frame[int(node_t[0])][int(node_t[1])] = (0, 0, 255)
 
@@ -120,6 +121,10 @@ class MazeSolver:
                         break
                 
             else: # go back to previous node
+                if self.show_dfs_debug:
+                    node_t = self._str_to_tuple(node)
+                    self.recogniser.colour_frame[int(node_t[0])][int(node_t[1])] = (255, 255, 255)
+
                 if len(self.path_stack) > 1:
                     self.path_stack.pop(-1) 
                     node = self.path_stack[-1]
@@ -127,11 +132,8 @@ class MazeSolver:
                     self.path_stack = False
                     break
 
-                if self.debug:
-                    node_t = self._str_to_tuple(node)
-                    self.recogniser.colour_frame[int(node_t[0])][int(node_t[1])] = (255, 255, 255)
 
-            if self.debug:
+            if self.show_dfs_debug:
                 cv2.imshow("frame", self.recogniser.colour_frame)
                 cv2.waitKey(1)
 

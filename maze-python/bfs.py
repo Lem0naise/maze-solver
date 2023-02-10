@@ -2,7 +2,7 @@ import time
 import numpy as np
 
 def _str_to_tuple(str):
-        return tuple([int(x.replace('(', '').replace(')', '').strip()) for x in str.split(',')])
+    return tuple([int(x.replace('(', '').replace(')', '').strip()) for x in str.split(',')])
 
 def path_to_bfs(path, height, width):
     # turning path into a 2d array
