@@ -6,18 +6,28 @@ import bfs
 
 
 class MazeSolver:
-    def __init__(self, maze, recogniser, show_debug, show_loading, thickness, line, line_colour, entity, entity_colour, delay):
+    def __init__(self, maze, recogniser, show_debug, dfs_opts, bfs_opts):
 
         self.start_time = time.time() # getting current time (used for calculating pathfinding time)
 
         self.height = len(maze)
         self.width = len(maze[0])
-        self.line_colour = line_colour
+
         self.recogniser = recogniser
-        self.thickness = thickness
 
         # display option vars
         self.debug = show_debug
+
+        self.show_dfs = dfs_opts['show_dfs']
+        self.show_dfs_delay = dfs_opts['show_dfs_delay']
+        self.dfs_line_colour = dfs_opts['dfs_line_colour']
+        self.dfs_thickness = dfs_opts['dfs_thickness']
+        self.hide_dfs_on_bfs_show = dfs_opts['hide_dfs_on_bfs_show']
+
+        self.show_bfs_cleanup = bfs_opts['show_bfs_cleanup']
+        self.show_bfs_delay = bfs_opts['show_bfs_delay']
+        self.bfs_line_colour = bfs_opts['bfs_line_colour']
+        self.bfs_thickness = bfs_opts['bfs_thickness']
 
         n_maze = deepcopy(maze);
         
@@ -43,7 +53,7 @@ class MazeSolver:
         maze_graph = self._list_to_graph(n_maze)
 
         path = self._traverse(maze_graph)
-        print("Traversing took % seconds." % (time.time() - self.start_time))
+        print(f"DFS complete. Took {(time.time() - self.start_time)} seconds.")
         
         #print(path)
         if path != False:
@@ -58,7 +68,7 @@ class MazeSolver:
             for j in range(len(maze[i])):
                 edges = []
                 
-                # TODO add corner (i.e. North East, etc) checking
+                # TODO add corner (i.e. North East, etc) checking (maybe not)
 
                 if i+1 < len(maze) and maze[i+1][j] == 1: # North
                     edges.append(f'({i+1}, {j})')
@@ -130,24 +140,59 @@ class MazeSolver:
         
     def _draw(self, path): # TODO make more beautiful
 
-        path = bfs.path_to_bfs(path, self.height, self.width) # run bfs on the path
-        print("Fully pathed maze.")
-        for node in path: # for the path
+        if self.hide_dfs_on_bfs_show:
+            clean_frame = deepcopy(self.recogniser.colour_frame)
+
+        if self.show_dfs:
+            for node in path:
+
+                y, x = [int(x) for x in self._str_to_tuple(node)]
+
+                for offset_y in range((1-self.dfs_thickness//2)-1, (self.dfs_thickness//2)+1):
+                    for offset_x in range((1-self.dfs_thickness//2)-1, (self.dfs_thickness//2)+1):
+
+                        # if the cell is a wall in the binary frame 
+                        sum = self.recogniser.frame[y+offset_y, x+offset_x]
+                        if sum != 0: # if its not a wall in the binary frame
+                            self.recogniser.colour_frame[y+offset_y][x+offset_x] = self.dfs_line_colour # setting the pixel the line colour
+
+                if self.show_dfs_delay != 0:
+                    cv2.imshow("frame", self.recogniser.colour_frame)
+                    cv2.waitKey(self.show_dfs_delay)
+                
+            cv2.imshow("frame", self.recogniser.colour_frame)
+            cv2.waitKey(1)
             
-            y, x = node
 
-            # line displaying (thickness etc)
+        if self.show_bfs_cleanup:
+            self.start_time = time.time() 
+            path = bfs.path_to_bfs(path, self.height, self.width) # run bfs on the path
+            print(f"BFS complete. Took {(time.time() - self.start_time)} seconds.")
 
-            for offset_y in range((1-self.thickness//2)-1, (self.thickness//2)+1):
-                for offset_x in range((1-self.thickness//2)-1, (self.thickness//2)+1):
+            if self.hide_dfs_on_bfs_show:
+                self.recogniser.colour_frame = deepcopy(clean_frame)
 
-                    # if the cell is a wall in the binary frame 
-                    sum = self.recogniser.frame[y+offset_y, x+offset_x]
-                    if sum != 0: # if its not a wall in the binary frame
-                        self.recogniser.colour_frame[y+offset_y][x+offset_x] = self.line_colour # setting the pixel the line colour
+            for node in path: # for the path
+                
+                y, x = node
 
+                # line displaying (thickness etc)
+
+                for offset_y in range((1-self.bfs_thickness//2)-1, (self.bfs_thickness//2)+1):
+                    for offset_x in range((1-self.bfs_thickness//2)-1, (self.bfs_thickness//2)+1):
+
+                        # if the cell is a wall in the binary frame 
+                        sum = self.recogniser.frame[y+offset_y, x+offset_x]
+                        if sum != 0: # if its not a wall in the binary frame
+                            self.recogniser.colour_frame[y+offset_y][x+offset_x] = self.bfs_line_colour # setting the pixel the line colour
+
+                if self.show_bfs_delay != 0:
+                    cv2.imshow("frame", self.recogniser.colour_frame)
+                    cv2.waitKey(self.show_bfs_delay)
+            
             cv2.imshow("frame", self.recogniser.colour_frame)
             cv2.waitKey(1)
 
+        print("Finished. Press enter to end program.")
         input()
     
