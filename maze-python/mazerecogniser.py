@@ -4,7 +4,7 @@ import cv2
 
 class convert:
     def __init__(self,image):
-        self.im = cv2.imread(image,0)
+        self.im = image
         self.ret,self.im = cv2.threshold(self.im,127,255,cv2.THRESH_BINARY)
     def corners(self):
         h,w = self.im.shape[0:2]
