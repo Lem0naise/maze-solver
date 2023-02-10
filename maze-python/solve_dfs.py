@@ -5,7 +5,7 @@ import numpy
 import bfs
 
 
-class MazeSolver:
+class MazeSolver_dfs:
     def __init__(self, maze, recogniser, dfs_opts, bfs_opts):
 
         self.start_time = time.time() # getting current time (used for calculating pathfinding time)
