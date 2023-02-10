@@ -1,26 +1,42 @@
 import time
 import numpy as np
 
+def _str_to_tuple(str):
+        return tuple([int(x.replace('(', '').replace(')', '').strip()) for x in str.split(',')])
+
 def path_to_bfs(path, height, width):
     # turning path into a 2d array
-    maze = np.zeros((height, width))
-    maze = np.invert(maze)
+    # numpy.ones()
+    maze = []
+    for i in range(height):
+        maze.append([])
+        for j in range(width):
+            maze[-1].append(1)
 
+    print("Emptied array.")
+    # set the actual empty path to 0s 
     for each in path:
+        each = _str_to_tuple(each)
         y, x = each
         maze[y][x] = 0
 
-    print(maze)
+    print(np.matrix(maze))
+
+    print("Populating maze...")
+    pop_maze = populate_maze(maze, _str_to_tuple(path[0]), _str_to_tuple(path[-1]))
+    print("Populated maze.")
+    print("Pathing maze...")
+    path = path_maze(pop_maze, _str_to_tuple(path[-1]))
+    print("Pathed maze.")
+    return path
 
 def populate_maze(maze_in, start, end):
 
-    stepped_pixels = 0
-    
     # numpy.zeros()
     maze = []
     for i in range(len(maze_in)):
         maze.append([])
-        for j in range(len(maze_in[i])):
+        for j in range(len(maze_in[0])):
             maze[-1].append(0)
 
 
@@ -38,16 +54,21 @@ def populate_maze(maze_in, start, end):
 
     # TODO SOMETIMES GET STUCK IN THIS WHILE LOOP WHILE END IS BELOW START (doesn't populate below start y coord)
     
-    prev_prog = 0
+    print("before while loop populating")
+    print(np.matrix(maze))
+    print()
     while maze[ey][ex] == 0: # while end not pathfound to (while end is still an empty cell)
 
         move(maze, maze_in, step, height, width)
         step += 1; # increment distance
     
         # TODO debug print
-        if step % 2000 == 0:
+        if step % 200 == 0:
             print(step)
 
+    print("after while loop populating")
+    print(np.matrix(maze))
+    print()
     return maze;
 
 
@@ -87,7 +108,6 @@ def move( maze, maze_input, step, height, width): # maze is the populating maze
                 if j<width-1 and maze[i][j+1] == 0 and maze_input[i][j+1] == 0: # cell East
                     maze[i][j+1] = step + 1;
 
-                stepped_pixels +=1
 
 
 def path_maze( pop_maze, start):
@@ -98,6 +118,15 @@ def path_maze( pop_maze, start):
     sy, sx = start;
     step = pop_maze[sy][sx]; # set path limit
 
+
+    # TODO
+    # for a reason that is only known by Allah this while loop never runs
+    # there ARE values in the pop_maze that are above 2
+    # but the start is not one of them
+    # why you ask?
+    # good question
+    # unfortunately
+    # no clue mate
     while step > 2:
 
         if sy>0 and pop_maze[sy-1][sx] == step-1: # cell North
@@ -131,6 +160,7 @@ def path_maze( pop_maze, start):
         path.append((sy, sx));
         step -= 1;
 
+    path.reverse() # reverse the path
     return path;
 
 
