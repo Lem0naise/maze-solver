@@ -3,7 +3,8 @@ import cv2
 import time
 import numpy
 
-class MazeSolver:
+
+class MazeSolver_bfs:
     def __init__(self, maze, recogniser, show_debug, show_loading, thickness, line, line_colour, entity, entity_colour, delay):
 
         self.start_time = time.time() # getting current time (used for calculating pathfinding time)
@@ -274,5 +275,3 @@ class MazeSolver:
             step -= 1;
 
         return path;
-
-    

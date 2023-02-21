@@ -21,26 +21,30 @@ class Recogniser:
                 if self.frame[y][x] == 255:
                     self.start = [y, x]                
 
-                    print(f"Start: ({y},{x}) {self.frame[self.start[0]][self.start[1]]}")
+                    print(f"Set start: ({y},{x}) {self.frame[self.start[0]][self.start[1]]}")
                     cv2.drawMarker(self.colour_frame, (x, y), color=(0, 0, 255), markerType=cv2.MARKER_CROSS, thickness=1, markerSize=3)
                     cv2.imshow("frame", self.colour_frame)
 
                     self.frame[self.start[0]][self.start[1]] = 2 # set start
+                
+                else:
+                    print("Start selection failed. Please select a white pixel.")
 
             elif self.end == []: # set end if start defined and end not yet defined
 
                 if self.frame[y][x] == 255:
                     self.end = [y, x]
 
-                    print(f"End: ({y},{x}) {self.frame[self.start[0]][self.start[1]]}")
+                    print(f"Set end: ({y},{x}) {self.frame[self.end[0]][self.end[1]]}")
                     cv2.drawMarker(self.colour_frame, (x, y), color=(0, 0, 255), markerType=cv2.MARKER_CROSS, thickness=1, markerSize=3)
                     cv2.imshow("frame", self.colour_frame)
                     
                     self.frame[self.end[0]][self.end[1]] = 3 # set end
 
-                    print("Press space to start.")
+                    print("Press any key to start maze traversal.")
 
-
+                else:
+                    print("End selection failed. Please select a white pixel.")
 
     def __init__(self, resolution, CAMERA):
 
@@ -58,7 +62,8 @@ class Recogniser:
 
         cap.set(3, 16) # setting width 
         cap.set(4, 9) # and height
-    
+
+        print("Click 'Q' to freeze.")
         while(True):
             # read current self.frame
             ret, self.frame = cap.read()
@@ -83,9 +88,12 @@ class Recogniser:
             
             # click q to select start and end
             if cv2.waitKey(1) & 0xFF == ord('q'):
+                print("Frozen!")
                 self.waiting = True
+                print("Select the start & end of the maze.")
                 cv2.waitKey(0); # wait for any key to be pressed
                 break
+        
 
         # After the loop release the cap(ture) object
         cap.release() 
