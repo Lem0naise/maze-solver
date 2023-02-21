@@ -15,7 +15,7 @@ bfs - significantly slower, always gets the shortest possible path
 # Display & Traversal Options
 
 CAMERA = 0
-resolution = (300, 450) # height, width
+resolution = (300, 300) # height, width
 
 transversal_algo = 'dfs' # dfs / bfs
 
@@ -25,7 +25,7 @@ dfs_opts = {
     'dfs_line_colour': (100, 100, 255),
     'dfs_thickness': 1,
     'hide_dfs_on_bfs_show': False, # hide dfs path when bfs path is calculated
-    'show_dfs_debug': False
+    'show_dfs_debug': False,
 }
 dfs_bfs_opts = { # bfs after dfs
     'show_bfs_cleanup': False,
@@ -42,7 +42,7 @@ only_bfs_opts = {
     'line_thickness': 3,
     'line': True,
     'line_colour': (222, 98, 91),
-    'entity': False,
+    'entity': True,
     'entity_colour': (100, 100, 255),
     'delay':1
 }
