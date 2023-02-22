@@ -19,6 +19,7 @@ CAMERA = 1
 resolution = (300, 300) # height, width
 
 transversal_algo = 'bfs' # dfs / bfs
+transversal_algo = 'bfs' # dfs / bfs
 
 dfs_opts = {
     'show_dfs': True,
@@ -26,7 +27,7 @@ dfs_opts = {
     'dfs_line_colour': (100, 100, 255),
     'dfs_thickness': 1,
     'hide_dfs_on_bfs_show': False, # hide dfs path when bfs path is calculated
-    'show_dfs_debug': False
+    'show_dfs_debug': False,
 }
 dfs_bfs_opts = { # bfs after dfs
     'show_bfs_cleanup': False,
@@ -43,8 +44,8 @@ only_bfs_opts = {
     'line_thickness': 7,
     'line': True,
     'line_colour': (222, 98, 91),
-    'entity': False,
-    'entity_colour': (100, 100, 255),
+    'entity': True,
+    'entity_colour': (50, 500, 50),
     'delay':1
 }
 
