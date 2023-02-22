@@ -117,7 +117,7 @@ class MazeSolver_bfs:
 
             cv2.waitKey(self.delay) # required wait statement with predetermined delay
 
-        input() # wait for input before ending program
+        cv2.waitKey(0) # wait for input before ending program
 
 
     def _populate_maze(self, maze_in, start, end):

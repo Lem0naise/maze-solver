@@ -46,7 +46,7 @@ class Recogniser:
                 else:
                     print("End selection failed. Please select a white pixel.")
 
-    def __init__(self, resolution, CAMERA):
+    def __init__(self, resolution, cap):
 
         self.width, self.height = resolution
         self.waiting = False
@@ -54,7 +54,7 @@ class Recogniser:
         self.start = []
         self.end = []
 
-        cap = cv2.VideoCapture(CAMERA) # capture object
+        cap = cap
 
         cv2.namedWindow("frame")
 
@@ -96,7 +96,6 @@ class Recogniser:
         
 
         # After the loop release the cap(ture) object
-        cap.release() 
         return
 
 

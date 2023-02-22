@@ -1,6 +1,7 @@
 from solve_dfs import MazeSolver_dfs;
 from solve_bfs import MazeSolver_bfs;
 from recognize import Recogniser;
+import cv2
 
 
 ''' 
@@ -14,10 +15,10 @@ bfs - significantly slower, always gets the shortest possible path
 
 # Display & Traversal Options
 
-CAMERA = 0
-resolution = (300, 450) # height, width
+CAMERA = 1
+resolution = (300, 300) # height, width
 
-transversal_algo = 'dfs' # dfs / bfs
+transversal_algo = 'bfs' # dfs / bfs
 
 dfs_opts = {
     'show_dfs': True,
@@ -39,7 +40,7 @@ dfs_bfs_opts = { # bfs after dfs
 only_bfs_opts = {
     'show_debug': False,
     'show_loading': False,
-    'line_thickness': 3,
+    'line_thickness': 7,
     'line': True,
     'line_colour': (222, 98, 91),
     'entity': False,
@@ -47,22 +48,29 @@ only_bfs_opts = {
     'delay':1
 }
 
-print('\n') # lil space
+cap = cv2.VideoCapture(CAMERA) # capture object
 
-recogniser = Recogniser(resolution, CAMERA);
+while True:
 
-# waiting for frame
-frame = recogniser.frame;
-while frame.any() == None:
+    print('\n') # lil space
+
+    recogniser = Recogniser(resolution, cap);
+
+    # waiting for frame
     frame = recogniser.frame;
-maze = frame;
+    while frame.any() == None:
+        frame = recogniser.frame;
+    maze = frame;
 
-height = len(maze)
-width = len(maze[0])
+    height = len(maze)
+    width = len(maze[0])
 
-if transversal_algo == 'dfs':
-    solver = MazeSolver_dfs(maze, recogniser, dfs_opts, dfs_bfs_opts);
-elif transversal_algo == 'bfs':
-    solver = MazeSolver_bfs(maze, recogniser, only_bfs_opts['show_debug'], only_bfs_opts['show_loading'], only_bfs_opts['line_thickness'], only_bfs_opts['line'], only_bfs_opts['line_colour'], only_bfs_opts['entity'], only_bfs_opts['entity_colour'], only_bfs_opts['delay']);
-else:
-    print(f'Traversal algorithm "{str(transversal_algo)}" not recognised.')
+    if transversal_algo == 'dfs':
+        solver = MazeSolver_dfs(maze, recogniser, dfs_opts, dfs_bfs_opts);
+    elif transversal_algo == 'bfs':
+        solver = MazeSolver_bfs(maze, recogniser, only_bfs_opts['show_debug'], only_bfs_opts['show_loading'], only_bfs_opts['line_thickness'], only_bfs_opts['line'], only_bfs_opts['line_colour'], only_bfs_opts['entity'], only_bfs_opts['entity_colour'], only_bfs_opts['delay']);
+    else:
+        print(f'Traversal algorithm "{str(transversal_algo)}" not recognised.')
+
+
+recogniser.cap.release() # never runs

@@ -198,5 +198,5 @@ class MazeSolver_dfs:
             cv2.waitKey(1)
 
         print("Finished. Press enter to end program.")
-        input()
+        cv2.waitKey(0)
     
