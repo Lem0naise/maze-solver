@@ -18,8 +18,7 @@ bfs - significantly slower, always gets the shortest possible path
 CAMERA = 1
 resolution = (300, 300) # height, width
 
-transversal_algo = 'bfs' # dfs / bfs
-transversal_algo = 'bfs' # dfs / bfs
+traversal_algo = 'bfs' # dfs / bfs
 
 dfs_opts = {
     'show_dfs': True,
@@ -66,12 +65,12 @@ while True:
     height = len(maze)
     width = len(maze[0])
 
-    if transversal_algo == 'dfs':
+    if traversal_algo == 'dfs':
         solver = MazeSolver_dfs(maze, recogniser, dfs_opts, dfs_bfs_opts);
-    elif transversal_algo == 'bfs':
+    elif traversal_algo == 'bfs':
         solver = MazeSolver_bfs(maze, recogniser, only_bfs_opts['show_debug'], only_bfs_opts['show_loading'], only_bfs_opts['line_thickness'], only_bfs_opts['line'], only_bfs_opts['line_colour'], only_bfs_opts['entity'], only_bfs_opts['entity_colour'], only_bfs_opts['delay']);
     else:
-        print(f'Traversal algorithm "{str(transversal_algo)}" not recognised.')
+        print(f'Traversal algorithm "{str(traversal_algo)}" not recognised.')
 
 
 recogniser.cap.release() # never runs
