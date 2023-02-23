@@ -22,7 +22,7 @@ traversal_algo = 'dfs' # dfs / bfs / both
 
 dfs_opts = {
     'show_dfs': True,
-    'show_dfs_delay': 0, # 0 for instant
+    'show_dfs_delay': 0.1, # 0 for instant, can be float
     'dfs_line_colour': (100, 100, 255),
     'dfs_thickness': 1,
     'hide_dfs_on_bfs_show': False, # hide dfs path when bfs path is calculated
@@ -30,7 +30,7 @@ dfs_opts = {
 }
 dfs_bfs_opts = { # bfs after dfs
     'show_bfs_cleanup': False,
-    'show_bfs_delay': 1, # 0 for instant
+    'show_bfs_delay': 1, # 0 for instant, int only
     'bfs_line_colour': (222, 98, 91),
     'bfs_thickness': 3,
     'show_bfs_debug': False
@@ -43,7 +43,7 @@ only_bfs_opts = {
     'line_thickness': 7,
     'line': True,
     'line_colour': (222, 98, 91),
-    'entity': True,
+    'entity': False,
     'entity_colour': (111, 49, 41),
     'delay':1
 }

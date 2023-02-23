@@ -153,6 +153,11 @@ class MazeSolver_dfs:
             clean_frame = deepcopy(self.recogniser.colour_frame)
 
         if self.show_dfs:
+            frame_no = 0
+            skip_x_frames = 1
+            if self.show_dfs_delay % 1 != 0: # if float
+                skip_x_frames = int(1 / self.show_dfs_delay)
+                self.show_dfs_delay = 1
             for node in path:
 
                 y, x = [int(x) for x in self._str_to_tuple(node)]
@@ -166,8 +171,11 @@ class MazeSolver_dfs:
                             self.recogniser.colour_frame[y+offset_y][x+offset_x] = self.dfs_line_colour # setting the pixel the line colour
 
                 if self.show_dfs_delay != 0:
-                    cv2.imshow("frame", self.recogniser.colour_frame)
-                    cv2.waitKey(self.show_dfs_delay)
+                    frame_no +=1
+
+                    if frame_no % skip_x_frames == 0:
+                        cv2.imshow("frame", self.recogniser.colour_frame)
+                        cv2.waitKey(self.show_dfs_delay)
                 
             cv2.imshow("frame", self.recogniser.colour_frame)
             cv2.waitKey(1)
