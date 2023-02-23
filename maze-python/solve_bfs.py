@@ -5,13 +5,15 @@ import numpy
 
 
 class MazeSolver_bfs:
-    def __init__(self, maze, recogniser, show_debug, show_loading, thickness, line, line_colour, entity, entity_colour, delay):
+    def __init__(self, maze, recogniser, show_debug, show_loading, thickness, line, line_colour, entity, entity_colour, delay, both_dfs_and_bfs):
 
         self.start_time = time.time() # getting current time (used for calculating pathfinding time)
 
         self.PREDICTED_PERCENTAGE_OF_MAZE_STEPPED = 0.6 # what percentage of the maze will be 'stepped through' (turn blue in debug mode) before end is found, used for loading bar
 
         self.recogniser = recogniser
+
+        self.both_dfs_and_bfs = both_dfs_and_bfs
 
         # display option vars
         self.debug = show_debug
@@ -117,7 +119,8 @@ class MazeSolver_bfs:
 
             cv2.waitKey(self.delay) # required wait statement with predetermined delay
 
-        cv2.waitKey(0) # wait for input before ending program
+        if not self.both_dfs_and_bfs:
+            cv2.waitKey(0) # wait for input before ending program
 
 
     def _populate_maze(self, maze_in, start, end):

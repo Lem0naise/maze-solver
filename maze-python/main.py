@@ -15,10 +15,10 @@ bfs - significantly slower, always gets the shortest possible path
 
 # Display & Traversal Options
 
-CAMERA = 0
+CAMERA = 1
 resolution = (300, 300) # height, width
 
-traversal_algo = 'bfs' # dfs / bfs
+traversal_algo = 'dfs' # dfs / bfs / both
 
 dfs_opts = {
     'show_dfs': True,
@@ -50,6 +50,7 @@ only_bfs_opts = {
 
 cap = cv2.VideoCapture(CAMERA) # capture object
 
+dfs_opts['both_dfs_and_bfs'] = False
 while True:
 
     print('\n') # lil space
@@ -66,9 +67,12 @@ while True:
     width = len(maze[0])
 
     if traversal_algo == 'dfs':
-        solver = MazeSolver_dfs(maze, recogniser, dfs_opts, dfs_bfs_opts);
+        solver = MazeSolver_dfs(maze, recogniser, dfs_opts, dfs_bfs_opts, only_bfs_opts);
     elif traversal_algo == 'bfs':
-        solver = MazeSolver_bfs(maze, recogniser, only_bfs_opts['show_debug'], only_bfs_opts['show_loading'], only_bfs_opts['line_thickness'], only_bfs_opts['line'], only_bfs_opts['line_colour'], only_bfs_opts['entity'], only_bfs_opts['entity_colour'], only_bfs_opts['delay']);
+        solver = MazeSolver_bfs(maze, recogniser, only_bfs_opts['show_debug'], only_bfs_opts['show_loading'], only_bfs_opts['line_thickness'], only_bfs_opts['line'], only_bfs_opts['line_colour'], only_bfs_opts['entity'], only_bfs_opts['entity_colour'], only_bfs_opts['delay'], dfs_opts['both_dfs_and_bfs']);
+    elif traversal_algo == 'both':
+        dfs_opts['both_dfs_and_bfs'] = True
+        solver = MazeSolver_dfs(maze, recogniser, dfs_opts, dfs_bfs_opts, only_bfs_opts);
     else:
         print(f'Traversal algorithm "{str(traversal_algo)}" not recognised.')
 

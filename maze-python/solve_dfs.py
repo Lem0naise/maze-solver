@@ -3,10 +3,13 @@ import cv2
 import time
 import numpy
 import bfs
+from solve_bfs import MazeSolver_bfs;
 
 
 class MazeSolver_dfs:
-    def __init__(self, maze, recogniser, dfs_opts, bfs_opts):
+    def __init__(self, maze, recogniser, dfs_opts, bfs_opts, only_bfs_opts):
+
+        self.only_bfs_opts = only_bfs_opts
 
         self.start_time = time.time() # getting current time (used for calculating pathfinding time)
 
@@ -14,6 +17,8 @@ class MazeSolver_dfs:
         self.width = len(maze[0])
 
         self.recogniser = recogniser
+
+        self.maze = maze
 
         # display option vars
 
@@ -23,6 +28,7 @@ class MazeSolver_dfs:
         self.dfs_thickness = dfs_opts['dfs_thickness']
         self.hide_dfs_on_bfs_show = dfs_opts['hide_dfs_on_bfs_show']
         self.show_dfs_debug = dfs_opts['show_dfs_debug']
+        self.both_dfs_and_bfs = dfs_opts['both_dfs_and_bfs']
 
         self.show_bfs_cleanup = bfs_opts['show_bfs_cleanup']
         self.show_bfs_delay = bfs_opts['show_bfs_delay']
@@ -62,7 +68,7 @@ class MazeSolver_dfs:
             self._draw(path)
         else:
             print('Maze not possible.')
-            input()
+            cv2.waitKey(0)
 
     def _list_to_graph(self, maze):
         graph = {}
@@ -165,9 +171,8 @@ class MazeSolver_dfs:
                 
             cv2.imshow("frame", self.recogniser.colour_frame)
             cv2.waitKey(1)
-            
 
-        if self.show_bfs_cleanup:
+        if self.show_bfs_cleanup: # runs bfs on path created by dfs
             print("Starting BFS...")
             self.start_time = time.time() 
             path = bfs.path_to_bfs(path, self.height, self.width) # run bfs on the path
@@ -196,6 +201,13 @@ class MazeSolver_dfs:
             
             cv2.imshow("frame", self.recogniser.colour_frame)
             cv2.waitKey(1)
+
+        if self.both_dfs_and_bfs: # runs bfs on whole maze after dfs complete
+            print("Starting BFS...")
+            self.start_time = time.time() 
+
+            MazeSolver_bfs(self.maze, self.recogniser, self.only_bfs_opts['show_debug'], self.only_bfs_opts['show_loading'], self.only_bfs_opts['line_thickness'], self.only_bfs_opts['line'], self.only_bfs_opts['line_colour'], self.only_bfs_opts['entity'], self.only_bfs_opts['entity_colour'], self.only_bfs_opts['delay'], self.both_dfs_and_bfs);
+            print(f"BFS complete. Took {(time.time() - self.start_time)} seconds.")
 
         print("Finished. Press enter to end program.")
         cv2.waitKey(0)
