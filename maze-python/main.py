@@ -15,7 +15,7 @@ bfs - significantly slower, always gets the shortest possible path
 
 # Display & Traversal Options
 
-CAMERA = 1
+CAMERA = 0
 resolution = (300, 300) # height, width
 
 traversal_algo = 'dfs' # dfs / bfs / both

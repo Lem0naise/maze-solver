@@ -63,7 +63,7 @@ class Recogniser:
         cap.set(3, 16) # setting width 
         cap.set(4, 9) # and height
 
-        print("Click 'Q' to freeze.")
+        print("Click the spacebar to freeze.")
         while(True):
             # read current self.frame
             ret, self.frame = cap.read()
@@ -87,7 +87,7 @@ class Recogniser:
             cv2.imshow("frame", self.colour_frame)
             
             # click q to select start and end
-            if cv2.waitKey(1) & 0xFF == ord('q'):
+            if cv2.waitKey(1) & 0xFF == 32:
                 print("Frozen!")
                 self.waiting = True
                 print("Select the start & end of the maze.")
