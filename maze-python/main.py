@@ -24,7 +24,7 @@ dfs_opts = {
     'show_dfs': True,
     'show_dfs_delay': 0.1, # 0 for instant, can be float
     'dfs_line_colour': (100, 100, 255),
-    'dfs_thickness': 1,
+    'dfs_thickness': 5,
     'hide_dfs_on_bfs_show': False, # hide dfs path when bfs path is calculated
     'show_dfs_debug': False,
 }
@@ -40,7 +40,7 @@ dfs_bfs_opts = { # bfs after dfs
 only_bfs_opts = {
     'show_debug': False,
     'show_loading': False,
-    'line_thickness': 7,
+    'line_thickness': 4,
     'line': True,
     'line_colour': (222, 98, 91),
     'entity': False,
