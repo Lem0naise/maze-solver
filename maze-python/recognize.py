@@ -46,7 +46,7 @@ class Recogniser:
                 else:
                     print("End selection failed. Please select a white pixel.")
 
-    def __init__(self, resolution, cap):
+    def __init__(self, resolution, cap, traversal_algo, status_text):
 
         self.width, self.height = resolution
         self.waiting = False
@@ -55,6 +55,9 @@ class Recogniser:
         self.end = []
 
         cap = cap
+
+        self.changed_traversal_algo = traversal_algo
+        self.status_text = status_text 
 
         cv2.namedWindow("frame")
 
@@ -82,17 +85,44 @@ class Recogniser:
             # thresholding greyscale into b&w
             lower_thres = 150 # 70/255 minimum whiteity
             (thresh, self.frame) = cv2.threshold(self.frame, lower_thres, 255, cv2.THRESH_BINARY);
+            
+            if self.status_text:
+                font = cv2.FONT_HERSHEY_SIMPLEX
+                bottomLeftCornerOfText = (2,10)
+                fontScale = 0.3
+                fontColor = (0,0,0)
+                thickness = 1
+                lineType = 2
+
+                cv2.putText(self.colour_frame, f'{self.changed_traversal_algo.upper()} | {str(resolution)[1:-1]}', 
+                    bottomLeftCornerOfText, 
+                    font, 
+                    fontScale,
+                    fontColor,
+                    thickness,
+                    lineType)
 
             # displays original coloured frame
             cv2.imshow("frame", self.colour_frame)
-            
+
             # click q to select start and end
-            if cv2.waitKey(1) & 0xFF == 32:
+            keypressed = cv2.waitKey(1)
+            if keypressed & 0xFF == 32:
                 print("Frozen!")
                 self.waiting = True
                 print("Select the start & end of the maze.")
                 cv2.waitKey(0); # wait for any key to be pressed
                 break
+
+            elif keypressed == ord('d'):
+                self.changed_traversal_algo = 'dfs'
+            
+            elif keypressed == ord('b'):
+                self.changed_traversal_algo = 'bfs'
+
+            
+                
+
         
 
         # After the loop release the cap(ture) object

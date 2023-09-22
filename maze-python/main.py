@@ -20,6 +20,8 @@ resolution = (300, 300) # height, width
 
 traversal_algo = 'dfs' # dfs / bfs / both
 
+status_text = True
+
 dfs_opts = {
     'show_dfs': True,
     'show_dfs_delay': 0.1, # 0 for instant, can be float
@@ -55,7 +57,7 @@ while True:
 
     print('\n') # lil space
 
-    recogniser = Recogniser(resolution, cap);
+    recogniser = Recogniser(resolution, cap, traversal_algo, status_text);
 
     # waiting for frame
     frame = recogniser.frame;
@@ -65,6 +67,9 @@ while True:
 
     height = len(maze)
     width = len(maze[0])
+
+    if (recogniser.changed_traversal_algo != ''):
+        traversal_algo =  recogniser.changed_traversal_algo
 
     if traversal_algo == 'dfs':
         solver = MazeSolver_dfs(maze, recogniser, dfs_opts, dfs_bfs_opts, only_bfs_opts);
